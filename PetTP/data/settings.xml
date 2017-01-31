@@ -40,15 +40,23 @@
             </stroke>
         </text>
     </global>
+    <clubfoot>
+        <pos>
+            <x>1549</x>
+            <y>1061</y>
+        </pos>
+        <text>
+            <stroke>
+                <alpha>-64770</alpha>
+            </stroke>
+        </text>
+    </clubfoot>
     <icydeath>
         <pos>
             <x>1580</x>
             <y>1059</y>
         </pos>
         <text>
-            <fonts>
-
-            </fonts>
             <stroke>
                 <alpha>-64770</alpha>
             </stroke>

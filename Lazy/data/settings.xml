@@ -2,14 +2,22 @@
 <settings>
     <global>
         <autotarget>false</autotarget>
-        <spell>Sinker Drill</spell>
+        <spell />
         <spell_active>false</spell_active>
         <target />
-        <weaponskill>Expiacion</weaponskill>
-        <weaponskill_active>true</weaponskill_active>
+        <weaponskill>Hexa Strike</weaponskill>
+        <weaponskill_active>false</weaponskill_active>
     </global>
-    <baelfire>
+    <clubfoot>
         <autotarget>true</autotarget>
-        <target>rank eft</target>
-    </baelfire>
+		<target>Quetzalcoatl</target>
+		<weaponskill>Stringing Pummel</weaponskill>
+		<weaponskill_active>true</weaponskill_active>
+    </clubfoot>
+    <rythor>
+        <autotarget>true</autotarget>
+		<target>Quetzalcoatl</target>
+		<weaponskill>Hexa Strike</weaponskill>
+		<weaponskill_active>true</weaponskill_active>
+    </rythor>
 </settings>

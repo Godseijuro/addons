@@ -363,10 +363,9 @@ function init_gear_sets()
     sets.precast.WS['Chant du Cygne'] = {
 		ammo="Jukukik Feather",
 		head={ name="Adhemar Bonnet", augments={'DEX+10','AGI+10','Accuracy+15',}},
-		body={ name="Adhemar Jacket", augments={'DEX+10','AGI+10','Accuracy+15',}},
-		hands={ name="Adhemar Wristbands", augments={'DEX+10','AGI+10','Accuracy+15',}},
-		legs="Samnuha Tights",
-		--legs={ name="Herculean Trousers", augments={'Accuracy+24 Attack+24','DEX+9','Accuracy+3',}},
+		body={ name="Herculean Vest", augments={'Accuracy+3 Attack+3','Crit. hit damage +4%','DEX+9','Accuracy+7','Attack+1',}},
+		hands={ name="Herculean Gloves", augments={'Accuracy+23 Attack+23','Crit. hit damage +3%','STR+8','Attack+15',}},
+		legs={ name="Herculean Trousers", augments={'Accuracy+15','Crit. hit damage +3%','DEX+6','Attack+3',}},
 		feet={ name="Herculean Boots", augments={'Accuracy+25','"Triple Atk."+4','Attack+7',}},
 		neck="Fotia Gorget",
 		waist="Fotia Belt",

@@ -66,6 +66,7 @@ windower.register_event('addon command', function (...)
 		config.reload(settings)
 	elseif args[1] == "save" then
 		config.save(settings,windower.ffxi.get_player().name)
+		windower.add_to_chat(2,"....Config saved for "..windower.ffxi.get_player().name.."....")
 	elseif args[1] == "test" then
 		test()
 	elseif args[1] == "show" then

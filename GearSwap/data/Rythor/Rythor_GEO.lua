@@ -45,11 +45,10 @@ function get_sets()
 	
 	-- Base Set --
 	sets.precast.FC = {
-		main="Solstice",
 		range={ name="Dunna", augments={'MP+20','Mag. Acc.+10','"Fast Cast"+3',}},
-		head={ name="Merlinic Hood", augments={'Mag. Acc.+19 "Mag.Atk.Bns."+19','MND+4','"Mag.Atk.Bns."+2',}},
+		head={ name="Merlinic Hood", augments={'Mag. Acc.+15','"Fast Cast"+7','CHR+1',}},
 		body="Vrikodara Jupon",
-		hands={ name="Merlinic Dastanas", augments={'"Mag.Atk.Bns."+25','"Fast Cast"+3','AGI+4','Mag. Acc.+7',}},
+		hands={ name="Merlinic Dastanas", augments={'Mag. Acc.+23','"Fast Cast"+5','INT+10','"Mag.Atk.Bns."+7',}},
 		legs="Geo. Pants +1",
 		feet="Regal Pumps +1",
 		waist="Channeler's Stone",
@@ -60,9 +59,10 @@ function get_sets()
     sets.precast.Geomancy = set_combine(sets.precast.FC, {})	
     sets.precast.Indi = set_combine(sets.precast.Geomancy, {}) 		
     sets.precast.Cure = set_combine(sets.precast.FC, {
-		main="Tefnut Wand",
+		main="Vadose Rod",
 		sub="Sors Shield",
 		ammo="Impatiens",
+		hands="Telchine Gloves",
 		waist="Witful Belt",
 		back="Ogapepo Cape",
 	})
@@ -94,18 +94,18 @@ function get_sets()
     sets.midcast.Recast = set_combine(sets.precast.FC, {})
 -- Healing Magic --
     sets.midcast.Cure = {
-		main="Tefnut Wand",
+		main="Tamaxchi",
 		sub="Sors Shield",
-		ammo="Impatiens",
+		head={ name="Merlinic Hood", augments={'Mag. Acc.+27','"Drain" and "Aspir" potency +7','MND+8','"Mag.Atk.Bns."+4',}},
 		body="Vrikodara Jupon",
-		hands="Serpentes Cuffs",
+		hands="Telchine Gloves",
 		legs="Geo. Pants +1",
 		feet="Regal Pumps +1",
 		neck="Phalaina Locket",
-		waist="Cascade Belt",
+		waist="Gishdubar Sash",
 		left_ring="Sirona's Ring",
 		right_ring="Stikini Ring",
-		back="Oretan. Cape +1",
+		back="Solemnity Cape",
 	}
 	sets.midcast.Cure.Weather = set_combine(sets.midcast.Cure, {
 		waist="Korin Obi"
@@ -121,29 +121,50 @@ function get_sets()
 		right_ring="Stikini Ring",
 		back="Oretan. Cape +1",
 	})
-	sets.midcast['Cursna'] = set_combine(sets.midcast.Cure, {})
+	sets.midcast['Cursna'] = set_combine(sets.midcast.Cure, {
+	    feet="Regal Pumps +1",
+		neck="Phi Necklace",
+		waist="Gishdubar Sash",
+		left_ring="Sirona's Ring",
+		right_ring="Stikini Ring",
+		back="Oretan. Cape +1",
+	})
 	
     -- Enhancing Magic --		
-	sets.midcast.Duration = set_combine(sets.midcast.Recast, {})	
+	sets.midcast.Duration = {
+		main="Bolelabunga",
+		range={ name="Dunna", augments={'MP+20','Mag. Acc.+10','"Fast Cast"+3',}},
+		head={ name="Merlinic Hood", augments={'Mag. Acc.+27','"Drain" and "Aspir" potency +7','MND+8','"Mag.Atk.Bns."+4',}},
+		body="Vrikodara Jupon",
+		hands={ name="Merlinic Dastanas", augments={'Mag. Acc.+23','"Fast Cast"+5','INT+10','"Mag.Atk.Bns."+7',}},
+		legs="Geo. Pants +1",
+		feet="Regal Pumps +1",
+		neck="Mizu. Kubikazari",
+		waist="Cascade Belt",
+		left_ring="Tamas Ring",
+		right_ring="Stikini Ring",
+		back="Prism Cape",
+	}
     sets.midcast['Phalanx'] = set_combine(sets.midcast.Duration, {})				
     sets.midcast['Stoneskin'] = set_combine(sets.midcast.Duration, {})	
-    sets.midcast['Aquaveil'] = set_combine(sets.midcast.Duration, {head="Amalric Coif"})
+    sets.midcast['Aquaveil'] = set_combine(sets.midcast.Duration, {main="Vadose Rod", head="Amalric Coif"})
 -- Enfeebling Magic --	
     sets.midcast.Enfeebling = { -- Full skill set for frazzle/distract/Poison -- 
-		main="Solstice",
+		main={ name="Solstice", augments={'Mag. Acc.+20','Pet: Damage taken -4%','"Fast Cast"+5',}},
+		sub="Genbu's Shield",
 		range={ name="Dunna", augments={'MP+20','Mag. Acc.+10','"Fast Cast"+3',}},
-		head={ name="Merlinic Hood", augments={'Mag. Acc.+19 "Mag.Atk.Bns."+19','MND+4','"Mag.Atk.Bns."+2',}},
+		head={ name="Merlinic Hood", augments={'Mag. Acc.+27','"Drain" and "Aspir" potency +7','MND+8','"Mag.Atk.Bns."+4',}},
 		body="Azimuth Coat",
 		hands="Azimuth Gloves",
-		legs={ name="Merlinic Shalwar", augments={'Mag. Acc.+4','Magic burst mdg.+9%','INT+1','"Mag.Atk.Bns."+14',}},
-		feet={ name="Merlinic Crackows", augments={'Mag. Acc.+9','Magic burst mdg.+8%','"Mag.Atk.Bns."+12',}},
+		legs="Psycloth Lappas",
+		feet={ name="Bagua Sandals +1", augments={'Enhances "Radial Arcana" effect',}},
 		neck="Spider Torque",
 		waist="Aswang Sash",
 		left_ear={ name="Moonshade Earring", augments={'Mag. Acc.+4','Latent effect: "Refresh"+1',}},
 		right_ear="Barkaro. Earring",
 		left_ring="Perception Ring",
 		right_ring="Stikini Ring",
-		back="Izdubar Mantle",
+		back={ name="Lifestream Cape", augments={'Geomancy Skill +9','Indi. eff. dur. +13','Pet: Damage taken -3%','Damage taken-2%',}},
 	}
 		
 	sets.midcast.Enfeebling.Macc = set_combine(sets.midcast.Enfeebling, {})	-- For Silence/Dispel/Sleep/Break/Gravity that arent affect by full enfeeb set or effect + gears --		
@@ -151,45 +172,46 @@ function get_sets()
     sets.midcast.Enfeebling.INT = set_combine(sets.midcast.Enfeebling, {}) -- For Blind/Bind who's Macc is enhanced by INT --	
 -- Dark Magic --
     sets.midcast.Bio = { -- For Bio, you want a full Dark magic skill set for potency -- 
-		main="Solstice",
+		main={ name="Solstice", augments={'Mag. Acc.+20','Pet: Damage taken -4%','"Fast Cast"+5',}},
 		range={ name="Dunna", augments={'MP+20','Mag. Acc.+10','"Fast Cast"+3',}},
-		head={ name="Bagua Galero", augments={'Enhances "Primeval Zeal" effect',}},
+		head={ name="Merlinic Hood", augments={'Mag. Acc.+27','"Drain" and "Aspir" potency +7','MND+8','"Mag.Atk.Bns."+4',}},
 		body="Geomancy Tunic",
-		hands="Azimuth Gloves",
+		hands={ name="Merlinic Dastanas", augments={'Mag. Acc.+23','"Fast Cast"+5','INT+10','"Mag.Atk.Bns."+7',}},
 		legs="Azimuth Tights",
-		feet={ name="Merlinic Crackows", augments={'Mag. Acc.+9','Magic burst mdg.+8%','"Mag.Atk.Bns."+12',}},
+		feet={ name="Merlinic Crackows", augments={'"Mag.Atk.Bns."+19','"Drain" and "Aspir" potency +8','INT+4','Mag. Acc.+12',}},
 		neck="Mizu. Kubikazari",
 		waist="Aswang Sash",
-		left_ear="Barkaro. Earring",
-		right_ear="Dark Earring",
+		left_ear="Dark Earring",
+		right_ear="Barkaro. Earring",
 		left_ring="Tamas Ring",
 		right_ring="Stikini Ring",
-		back="Ogapepo Cape",
+		back="Prism Cape",
 	}
     sets.midcast.Dark = set_combine(sets.midcast.Bio, { -- For Aspir/Drain -- 
-	
+		head="Bagua Galero",
+		legs={ name="Merlinic Shalwar", augments={'Mag. Acc.+5','"Drain" and "Aspir" potency +10','MND+7',}},
 	})
     sets.midcast['Stun']  = set_combine(sets.midcast.Bio, {})	
 -- Elemental Magic --
     sets.midcast.Elemental = { -- Normal Nukes --
 		main="Solstice",
 		range={ name="Dunna", augments={'MP+20','Mag. Acc.+10','"Fast Cast"+3',}},
-		head={ name="Merlinic Hood", augments={'Mag. Acc.+19 "Mag.Atk.Bns."+19','MND+4','"Mag.Atk.Bns."+2',}},
+		head={ name="Merlinic Hood", augments={'Mag. Acc.+28','Magic burst mdg.+9%','"Mag.Atk.Bns."+10',}},
 		body="Azimuth Coat",
-		hands="Merlinic Dastanas",
-		legs={ name="Merlinic Shalwar", augments={'Mag. Acc.+4','Magic burst mdg.+9%','INT+1','"Mag.Atk.Bns."+14',}},
-		feet={ name="Merlinic Crackows", augments={'Mag. Acc.+9','Magic burst mdg.+8%','"Mag.Atk.Bns."+12',}},
+		hands={ name="Merlinic Dastanas", augments={'Mag. Acc.+23 "Mag.Atk.Bns."+23','Magic burst mdg.+11%','Mag. Acc.+8','"Mag.Atk.Bns."+7',}},
+		legs={ name="Merlinic Shalwar", augments={'"Mag.Atk.Bns."+21','Magic burst mdg.+9%','Mag. Acc.+15',}},
+		feet={ name="Merlinic Crackows", augments={'Mag. Acc.+23','Magic burst mdg.+8%','MND+1','"Mag.Atk.Bns."+10',}},
 		neck="Mizu. Kubikazari",
 		waist="Aswang Sash",
-		left_ear="Barkaro. Earring",
-		right_ear="Friomisi Earring",
+		left_ear="Friomisi Earring",
+		right_ear="Barkaro. Earring",
 		left_ring="Acumen Ring",
 		right_ring="Stikini Ring",
 		back="Izdubar Mantle",
 	} 
     sets.midcast.Elemental.MB = set_combine(sets.midcast.Elemental, { -- For when MB mode is turned on --
-		ring1="Locus Ring",
-		ring2="Mujin Band"})		
+		left_ring="Mujin Band",
+	})		
     sets.midcast.Elemental.Weather = set_combine(sets.midcast.Elemental, { -- For normal nukes with weather on/appropriate day --
 		back="Twilight Cape",
 		waist="Hachirin-no-Obi"})	

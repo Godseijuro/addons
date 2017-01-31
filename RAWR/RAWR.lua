@@ -47,10 +47,12 @@ T{
 
 dragons = 
 T{
-'Azi Dahaka',
-'Naga Raja',
+--'Naga Raja',
 'Quetzalcoatl'
 }
+
+--'Azi Dahaka',
+
 
 windower.register_event("incoming text", function(original,modified,original_mode,modified_mode, blocked)
     if original_mode == 212 or original_mode == 211 then --Unity chat = 211/212, 211 might be outgoing
