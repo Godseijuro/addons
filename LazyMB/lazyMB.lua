@@ -27,7 +27,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ]]
 
 _addon.name = 'lazyMB'
-_addon.version = '0.2'
+_addon.version = '0.3'
 _addon.author = 'kotodamage'
 _addon.command = 'lazyMB'
 
@@ -38,6 +38,7 @@ require('tables')
 -- global variables
 fastcast_rate = 0.8
 time_limit = 8
+delay = 0
 valid_jobs = {'BLM', 'RDM', 'SCH', 'GEO'}
 
 spells = {
@@ -199,6 +200,12 @@ windower.register_event('addon command', function(...)
         time_limit = 8
       end
 
+      if args[4] then
+        delay = tonumber(args[4])
+      else
+        delay = 0
+      end
+
       if not ignore_jobs and not table.contains(valid_jobs, windower.ffxi.get_player().main_job) then
         windower.add_to_chat(chatColor.error, '[lazyMB] Abort: Invalid main job.')
         return
@@ -221,10 +228,26 @@ windower.register_event('addon command', function(...)
 
         valid, msg = validate_spell(spell, player, target, current_mp, recasts, learned, time, cast_time)
         if valid then
-          wait_time = cast_time + 3.8
-          time = time + wait_time
+
+          if time == 0 then
+
+            if cast_time < delay then
+              buffer = buffer .. 'wait ' .. delay - cast_time .. ';'
+              if verbose then
+                windower.add_to_chat(chatColor.info, "[lazyMB] Delay casting for " .. (delay - cast_time) .. " sec.")
+              end
+              time = 3.8
+
+            else
+              time = cast_time - delay + 3.8
+            end
+
+          else
+            time = time + cast_time + 3.8
+          end
+
           current_mp = current_mp - spell.mp_cost
-          buffer = buffer .. 'input /ma ' .. spell.ja .. ' <t>; wait ' .. wait_time .. ';'
+          buffer = buffer .. 'input /ma ' .. spell.ja .. ' <t>;wait ' .. (cast_time + 3.8) .. ';'
           table.insert(queue, spell.ja)
 
           -- check already over time limit
@@ -264,6 +287,10 @@ windower.register_event('addon command', function(...)
       arg = args[2]:lower()
       ignore_jobs = arg == 'on' or arg == 'enable' or arg == 'true'
       windower.add_to_chat(chatColor.info, windower.to_shift_jis('[lazyMB] ignore_jobs: ' .. tostring(ignore_jobs)))
+
+    else
+      -- print help to chat
+      windower.add_to_chat(chatColor.info, helptext)
     end
   end
 end)
@@ -370,3 +397,24 @@ function validate_spell(spell, player, target, current_mp, recasts, learned, tim
 
   return true
 end
+
+helptext = [[
+Usage: lazyMB <command> <args>
+Note: <boolean> evaluate 'on|true|enable' as true, others false.
+  lazyMB cast <element> [accept_time] [start_delay]
+    -> Cast spells of <element>.
+     <element>:
+      fire, water, thunder, stone, aero, blizzard,
+      dark, light, death
+     [accept_time]: Time duration for MB. default: 8.
+     [start_delay]: Time for wait for MB starts. default: 0.
+  lazyMB verbose <boolean>
+    -> Print verbose logs. default: false.
+  lazyMB aoe <boolean>
+    -> Use AoE spells if this option is true. default: true.
+  lazyMB helix <boolean>
+    -> Use helix if this option is true. default: true.
+  lazyMB ignore_jobs <boolean>
+    -> Skip checking of main job. default: false.
+       If this option is false, only BLM/RDM/SCH/GEO can cast spells.
+]]

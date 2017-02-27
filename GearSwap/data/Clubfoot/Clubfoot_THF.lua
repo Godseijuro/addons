@@ -124,7 +124,19 @@ function init_gear_sets()
 	-- Weaponskill sets
 	-- Default set for any weaponskill that isn't any more specifically defined
 	sets.precast.WS = {
-	
+		ammo="Ginsen",
+		head={ name="Adhemar Bonnet", augments={'DEX+10','AGI+10','Accuracy+15',}},
+		body="Mummu Jacket",
+		hands={ name="Herculean Gloves", augments={'Accuracy+23 Attack+23','"Dual Wield"+1','AGI+3','Accuracy+7','Attack+13',}},
+		legs={ name="Herculean Trousers", augments={'Accuracy+21','"Triple Atk."+1','MND+3','Attack+3',}},
+		feet={ name="Herculean Boots", augments={'Accuracy+15 Attack+15','"Triple Atk."+2','Accuracy+9',}},
+		neck="Fotia Gorget",
+		waist="Fotia Belt",
+		left_ear="Mache Earring",
+		right_ear="Kemas Earring",
+		left_ring="Petrov Ring",
+		right_ring="Epona's Ring",
+		back="Atheling Mantle",
 	}
 	sets.precast.WS.Acc = set_combine(sets.precast.WS, {
 	
@@ -184,16 +196,17 @@ function init_gear_sets()
 
 	-- Idle sets (default idle set not needed since the other three are defined, but leaving for testing purposes)
 	sets.idle = {
-		head={ name="Taeon Chapeau", augments={'Evasion+16','"Triple Atk."+1',}},
-		body={ name="Taeon Tabard", augments={'Evasion+20','"Dual Wield"+1',}},
-		hands={ name="Taeon Gloves", augments={'Accuracy+11','"Triple Atk."+1',}},
-		legs={ name="Taeon Tights", augments={'Evasion+15','"Triple Atk."+1',}},
-		feet={ name="Taeon Boots", augments={'Accuracy+17','"Triple Atk."+1',}},
-		neck="Rabbit Charm",
+		ammo="Ginsen",
+		head={ name="Adhemar Bonnet", augments={'DEX+10','AGI+10','Accuracy+15',}},
+		body="Mummu Jacket",
+		hands={ name="Plun. Armlets", augments={'Enhances "Perfect Dodge" effect',}},
+		legs={ name="Herculean Trousers", augments={'Accuracy+21','"Triple Atk."+1','MND+3','Attack+3',}},
+		feet="Skulk. Poulaines",
+		neck="Sanctity Necklace",
 		waist="Kentarch Belt",
-		left_ear="Kemas Earring",
-		right_ear="Eabani Earring",
-		left_ring="Enlivened Ring",
+		left_ear="Eabani Earring",
+		right_ear="Suppanomimi",
+		left_ring="Petrov Ring",
 		right_ring="Epona's Ring",
 		back="Atheling Mantle",
     }
@@ -222,16 +235,17 @@ function init_gear_sets()
 	
 	-- Normal melee group
 	sets.engaged = {
-		head={ name="Taeon Chapeau", augments={'Evasion+16','"Triple Atk."+1',}},
-		body={ name="Taeon Tabard", augments={'Evasion+20','"Dual Wield"+1',}},
-		hands={ name="Taeon Gloves", augments={'Accuracy+11','"Triple Atk."+1',}},
-		legs={ name="Taeon Tights", augments={'Evasion+15','"Triple Atk."+1',}},
-		feet={ name="Taeon Boots", augments={'Accuracy+17','"Triple Atk."+1',}},
-		neck="Rabbit Charm",
+		ammo="Ginsen",
+		head={ name="Adhemar Bonnet", augments={'DEX+10','AGI+10','Accuracy+15',}},
+		body="Mummu Jacket",
+		hands={ name="Plun. Armlets", augments={'Enhances "Perfect Dodge" effect',}},
+		legs={ name="Herculean Trousers", augments={'Accuracy+21','"Triple Atk."+1','MND+3','Attack+3',}},
+		feet="Skulk. Poulaines",
+		neck="Sanctity Necklace",
 		waist="Kentarch Belt",
-		left_ear="Kemas Earring",
-		right_ear="Eabani Earring",
-		left_ring="Enlivened Ring",
+		left_ear="Eabani Earring",
+		right_ear="Suppanomimi",
+		left_ring="Petrov Ring",
 		right_ring="Epona's Ring",
 		back="Atheling Mantle",
 	}

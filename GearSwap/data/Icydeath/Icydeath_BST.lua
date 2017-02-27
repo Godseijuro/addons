@@ -58,6 +58,8 @@ function user_setup()
 	
 	gear.weaponskill_waist = "Fotia Belt"
 	gear.weaponskill_neck = "Fotia Gorget"
+	
+	set_lockstyle('4')
 end
 
 -- Complete list of Ready moves to use with Sic & Ready Recast -5 Desultor Tassets.
@@ -767,4 +769,8 @@ function get_combat_form()
 	else
 		state.CombatForm:reset()
 	end
+end
+
+function set_lockstyle(num)
+	send_command('wait 2; input /lockstyleset '..num)
 end

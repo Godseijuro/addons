@@ -27,7 +27,7 @@ default = {
     ignore=L{},
     song={},
     songs={march=2},
-    min_ws=20,
+    min_ws=1,
     max_ws=99,
     box={text={size=10}}
     }

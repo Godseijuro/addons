@@ -1,0 +1,9 @@
+hb disable [cmd]
+===============
+na		:	Disables status removal
+cure	:	Disables all single cures
+curaga 	:	Disables all curagas
+buffs	:	Disables all buffing (Haste, Refresh, etc.)
+debuff	:	Disables all debuffing (Dia, Bio, etc.)
+spam	:	Disables spamming ('//hb help' to see more info on spam)
+ws		: 	Disables weaponskilling

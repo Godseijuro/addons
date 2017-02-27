@@ -18,7 +18,7 @@ function get_sets()
 	send_command('bind ^f11 gs c C11')
 -- Auto Functions --
 	AutoRemedy = 'OFF' -- Set to ON if you want to auto use remedies if silenced or Paralyzed, otherwise set to OFF --	
-	AutoBlaze = 'ON' -- Set to ON if you want to auto use Blaze of glory on Geo- spells, otherwise set to OFF --	
+	AutoBlaze = 'OFF' -- Set to ON if you want to auto use Blaze of glory on Geo- spells, otherwise set to OFF --	
 	AutoEntrust = 'ON' -- Set to ON if you want to auto use Entrust when you are targetting a player other than yourself to cast indi spells, otherwise set to OFF --
 -- Custom Timers --
     -- Still looking for a way to auto detect individual indi spell	timers, if you have all the gears, your duration is 5 min, load timers to see it --
@@ -26,7 +26,7 @@ function get_sets()
 -- Modes --
     LuopanIndex = 1
     LuopanArray = {"Normal","Regen","Defense"} -- Press ctrl + F9 to circle through Luopan modes --
-    MagicBurst = 'OFF' -- Press ctrl +F1 to circle through Magic modes --
+    MagicBurst = 'OFF' -- Press ctrl + F1 to circle through Magic modes --
 	WeaponLock = 'OFF' -- Press ctrl + F10 for Weapon Lock--	
 	Capacity = 'OFF' -- Press Ctrl +F11 to have Capacity cape locked on while Idle, Change the cape at line 28 --
 -- Gears --
@@ -36,6 +36,8 @@ function get_sets()
 	gear.Refresh_Head = {name="Amalric Coif"} -- Add refresh effect + head if you want to use it, it not leave {} empty --	
 -- Set macro book/set --
     --send_command('input /macro book 3;wait .1;input /macro set 1') -- set macro book/set here --	
+	set_lockstyle('1')
+	
 -- Area mapping --	
     Town = S{"Ru'Lude Gardens","Upper Jeuno","Lower Jeuno","Port Jeuno","Port Windurst","Windurst Waters","Windurst Woods","Windurst Walls","Heavens Tower",
 	         "Port San d'Oria","Northern San d'Oria","Southern San d'Oria","Port Bastok","Bastok Markets","Bastok Mines","Metalworks","Aht Urhgan Whitegate",
@@ -125,8 +127,8 @@ function get_sets()
 	    feet="Regal Pumps +1",
 		neck="Phi Necklace",
 		waist="Gishdubar Sash",
-		left_ring="Sirona's Ring",
-		right_ring="Stikini Ring",
+		right_ring="Ephedra Ring",
+		left_ring="Ephedra Ring",
 		back="Oretan. Cape +1",
 	})
 	
@@ -248,7 +250,7 @@ function get_sets()
 		hands={ name="Bagua Mitaines", augments={'Enhances "Curative Recantation" effect',}},
 		legs="Assid. Pants +1",
 		feet="Battlecast Gaiters",
-		neck="Orochi Nodowa",
+		neck="Sanctity Necklace",
 		waist="Witful Belt",
 		left_ear={ name="Moonshade Earring", augments={'Mag. Acc.+4','Latent effect: "Refresh"+1',}},
 		right_ear="Etiolation Earring",
@@ -269,7 +271,7 @@ function get_sets()
 		hands="Geo. Mitaines +1",
 		legs="Assid. Pants +1",
 		feet="Bagua Sandals +1",
-		neck="Orochi Nodowa",
+		neck="Sanctity Necklace",
 		waist="Witful Belt",
 		left_ear={ name="Moonshade Earring", augments={'Mag. Acc.+4','Latent effect: "Refresh"+1',}},
 		right_ear="Etiolation Earring",
@@ -278,7 +280,7 @@ function get_sets()
 		back={ name="Lifestream Cape", augments={'Geomancy Skill +9','Indi. eff. dur. +13','Pet: Damage taken -3%','Damage taken-2%',}},
 	}		
     sets.aftercast.Luopan.Regen =  set_combine(sets.aftercast.Luopan, { -- Luopan Regen gears --
-	
+		back={ name="Nantosuelta's Cape", augments={'Pet: "Regen"+10',}},
 	})			
     sets.aftercast.Luopan.Defense = set_combine(sets.aftercast.Luopan, { -- When YOU need to stand in range --
 		neck="Twilight Torque"
@@ -534,3 +536,7 @@ windower.register_event('zone change', function()
         equip(sets.aftercast.Idle)		
     end	
 end)
+
+function set_lockstyle(num)
+	send_command('wait 2; input /lockstyleset '..num)
+end

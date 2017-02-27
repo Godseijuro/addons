@@ -63,7 +63,7 @@
             <italic>false</italic>
             <size>10</size>
         </font>
-        <light>true</light>
+        <light>false</light>
         <max_scores>5</max_scores>
         <position>
             <x>0</x>

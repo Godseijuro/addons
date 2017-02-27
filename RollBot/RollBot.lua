@@ -47,8 +47,57 @@ profiles = {
 			[1] = "Samurai Roll",
 			[2] = "Chaos Roll"},
 		crooked = {[1]="Samurai Roll"}
+	},
+	['standard_magic'] = {
+		rolls = {
+			[1] = "Wizard's Roll",
+			[2] = "Warlock's Roll"},
+		crooked = {[1]="Wizard's Roll"}
+	},
+	['standard_pet'] = {
+		rolls = {
+			[1] = "Beast Roll",
+			[2] = "Drachen Roll"},
+		crooked = {[1]="Beast Roll"}
+	},
+	['standard_pet_magic'] = {
+		rolls = {
+			[1] = "Puppet Roll",
+			[2] = "Drachen Roll"},
+		crooked = {[1]="Puppet Roll"}
+	},
+	['mab_mp'] = {
+		rolls = {
+			[1] = "Wizard's Roll",
+			[2] = "Evoker's Roll"},
+		crooked = {[1]="Wizard's Roll"}
+	},
+	['xp_melee'] = {
+		rolls = {
+			[1] = "Corsair's Roll",
+			[2] = "Samurai Roll"},
+		crooked = {[1]="Corsair's Roll"}
+	},
+	['xp_magic'] = {
+		rolls = {
+			[1] = "Corsair's Roll",
+			[2] = "Wizard's Roll"},
+		crooked = {[1]="Corsair's Roll"}
+	},
+	['xp_pet'] = {
+		rolls = {
+			[1] = "Corsair's Roll",
+			[2] = "Beast Roll"},
+		crooked = {[1]="Corsair's Roll"}
+	},
+	['xp_pet_magic'] = {
+		rolls = {
+			[1] = "Corsair's Roll",
+			[2] = "Puppet Roll"},
+		crooked = {[1]="Corsair's Roll"}
 	}
 }
+
 windower.register_event('load', function()
 	zone_enter_rb = os.clock()-25
 	enabled = false

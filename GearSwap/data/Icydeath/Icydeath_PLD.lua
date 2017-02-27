@@ -51,6 +51,7 @@ function user_setup()
     send_command('bind @f11 gs c toggle EquipShield')
 
     --select_default_macro_book(15)
+	set_lockstyle('1')
 end
 
 function user_unload()
@@ -193,7 +194,6 @@ function init_gear_sets()
 	}
         
     sets.midcast.Enmity = {
-		ammo="Charitoni Sling",
 		head={ name="Cab. Coronet", augments={'Enhances "Iron Will" effect',}},
 		body={ name="Souveran Cuirass", augments={'HP+80','Enmity+7','Potency of "Cure" effect received +10%',}},
 		hands={ name="Eschite Gauntlets", augments={'Mag. Evasion+15','Spell interruption rate down +15%','Enmity+7',}},
@@ -254,7 +254,7 @@ function init_gear_sets()
     -- Idle sets
     sets.idle = {
 		ammo="Homiliary",
-		head={ name="Valorous Mask", augments={'Accuracy+30','"Store TP"+5','DEX+3','Attack+14',}},
+		head="Valorous Mask",
 		body="Chozoron Coselete",
 		hands={ name="Souv. Handschuhs", augments={'HP+50','Shield skill +10','Phys. dmg. taken -3',}},
 		legs="Sulevia's Cuisses +1",
@@ -300,7 +300,7 @@ function init_gear_sets()
 	-- -50% cap on the various types of damage taken. 
 	-- There is an overall cap of -87.5% damage taken, including sources that bypass the other caps.
     sets.defense.PDT = {
-		ammo="Charitoni Sling",
+		ammo="Vanir Battery",
 		head={ name="Founder's Corona", augments={'DEX+8','Accuracy+15','Mag. Acc.+14','Magic dmg. taken -3%',}},
 		body={ name="Souveran Cuirass", augments={'HP+80','Enmity+7','Potency of "Cure" effect received +10%',}},
 		hands={ name="Souv. Handschuhs", augments={'HP+50','Shield skill +10','Phys. dmg. taken -3',}},
@@ -352,8 +352,8 @@ function init_gear_sets()
 		right_ear="Sanare Earring",
 		left_ring="Defending Ring",
 		right_ring="Shadow Ring",
-		--back="Engulfer Cape +1", -- use this when WoE campaign is over.
-		back={ name="Weard Mantle", augments={'VIT+3','Enmity+3','Phalanx +5',}},
+		back="Engulfer Cape +1", -- use this when WoE campaign is over.
+		--back={ name="Weard Mantle", augments={'VIT+3','Enmity+3','Phalanx +5',}},
 	}
 
 
@@ -363,9 +363,9 @@ function init_gear_sets()
     -- acc = 1019, DA = 22%, Haste = 22%
     sets.engaged = {
 		ammo="Vanir Battery",
-		head={ name="Valorous Mask", augments={'Accuracy+30','"Store TP"+5','DEX+3','Attack+14',}},
+		head="Valorous Mask",
 		body={ name="Found. Breastplate", augments={'Accuracy+14','Mag. Acc.+13','Attack+14','"Mag.Atk.Bns."+14',}},
-		hands={ name="Valorous Mitts", augments={'Accuracy+28','"Dbl.Atk."+4','Attack+3',}},
+		hands="Sulev. Gauntlets +1",
 		legs={ name="Valor. Hose", augments={'Accuracy+23','Damage taken-4%','AGI+6',}},
 		feet={ name="Amm Greaves", augments={'HP+50','VIT+10','Accuracy+15','Damage taken-2%',}},
 		neck="Lissome Necklace",
@@ -380,9 +380,9 @@ function init_gear_sets()
 	-- acc = 1049, DA = 19%
     sets.engaged.Acc = {
 		ammo="Vanir Battery",
-		head={ name="Valorous Mask", augments={'Accuracy+30','"Store TP"+5','DEX+3','Attack+14',}},
+		head="Valorous Mask",
 		body={ name="Found. Breastplate", augments={'Accuracy+14','Mag. Acc.+13','Attack+14','"Mag.Atk.Bns."+14',}},
-		hands={ name="Valorous Mitts", augments={'Accuracy+28','"Dbl.Atk."+4','Attack+3',}},
+		hands="Sulev. Gauntlets +1",
 		legs={ name="Valor. Hose", augments={'Accuracy+23','Damage taken-4%','AGI+6',}},
 		feet={ name="Odyssean Greaves", augments={'Accuracy+25 Attack+25','STR+4','Accuracy+7','Attack+2',}},
 		neck="Subtlety Spec.",
@@ -582,4 +582,8 @@ function select_default_macro_book()
     else
         set_macro_page(10, 15)
     end
+end
+
+function set_lockstyle(num)
+	send_command('wait 2; input /lockstyleset '..num)
 end

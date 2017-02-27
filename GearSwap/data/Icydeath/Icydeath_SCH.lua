@@ -84,6 +84,7 @@ end
 
 -- Setup vars that are user-independent.  state.Buff vars initialized here will automatically be tracked.
 function job_setup()
+	
     info.addendumNukes = S{"Stone IV", "Water IV", "Aero IV", "Fire IV", "Blizzard IV", "Thunder IV",
         "Stone V", "Water V", "Aero V", "Fire V", "Blizzard V", "Thunder V"}
 
@@ -117,7 +118,8 @@ function job_setup()
     state.Buff['Sublimation: Activated'] = buffactive['Sublimation: Activated'] or false
     update_active_strategems()
     --select_default_macro_book()
-
+	set_lockstyle('5')
+	
 	custom_timers = {}
 end
 
@@ -1178,4 +1180,9 @@ end
 -- Select default macro book on initial load or subjob change.
 function select_default_macro_book()
     set_macro_page(1, 18)
+end
+
+
+function set_lockstyle(num)
+	send_command('wait 2; input /lockstyleset '..num)
 end

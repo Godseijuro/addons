@@ -39,6 +39,28 @@
             </stroke>
         </text>
     </global>
+    <icydeath>
+        <pos>
+            <x>1341</x>
+            <y>896</y>
+        </pos>
+        <text>
+            <stroke>
+                <alpha>-64770</alpha>
+            </stroke>
+        </text>
+    </icydeath>
+    <rythor>
+        <pos>
+            <x>1605</x>
+            <y>440</y>
+        </pos>
+        <text>
+            <stroke>
+                <alpha>-64770</alpha>
+            </stroke>
+        </text>
+    </rythor>
     <vanyar>
         <pos>
             <x>19</x>

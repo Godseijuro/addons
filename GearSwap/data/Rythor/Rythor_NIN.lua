@@ -73,6 +73,7 @@ function user_setup()
     
     select_movement_feet()
     --select_default_macro_book()
+	set_lockstyle('1')
 end
 
 
@@ -493,4 +494,8 @@ function select_default_macro_book()
     else
         set_macro_page(1, 3)
     end
+end
+
+function set_lockstyle(num)
+	send_command('wait 2; input /lockstyleset '..num)
 end

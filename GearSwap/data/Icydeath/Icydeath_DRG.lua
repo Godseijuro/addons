@@ -20,6 +20,8 @@ function job_setup()
 	state.Buff = {}
 	state.AutoMode = M{['description'] = 'Auto Mode(default: On)'}
 	state.AutoMode:options('On', 'Off')
+	state.AutoWS = M{['description'] = 'Auto WS'}
+	state.AutoWS:options('Stardiver', 'Drakesbane', 'Camlann\'s Torment')
 	-- Event Register for AutoMode
 	windower.register_event('tp change', function(tp)
         if tp > 100
@@ -58,6 +60,7 @@ function user_setup()
 	send_command('bind !` input /ja "Seigan" <me>')
 
 	--select_default_macro_book(1, 16)
+	set_lockstyle('4')
 end
  
  
@@ -192,17 +195,17 @@ function init_gear_sets()
         --sets.precast.WS = {}
 		sets.precast.WS = {
 			ammo="Ginsen",
-			head="Sulevia's Mask +1",
-			body="Sulevia's Plate. +1",
-			hands="Sulev. Gauntlets +1",
+			head={ name="Valorous Mask", augments={'Accuracy+29','Weapon skill damage +1%','VIT+7','Attack+15',}},
+			body={ name="Found. Breastplate", augments={'Accuracy+14','Mag. Acc.+13','Attack+14','"Mag.Atk.Bns."+14',}},
+			hands={ name="Valorous Mitts", augments={'Accuracy+16','Crit. hit damage +3%','STR+3',}},
 			legs="Sulevi. Cuisses +1",
-			feet="Sulev. Leggings +1",
+			feet={ name="Valorous Greaves", augments={'Attack+26','Crit. hit damage +2%','STR+6','Accuracy+10',}},
 			neck="Fotia Gorget",
 			waist="Fotia Belt",
-			left_ear="Brutal Earring",
+			left_ear="Cessance Earring",
 			right_ear={ name="Moonshade Earring", augments={'"Mag.Atk.Bns."+4','TP Bonus +25',}},
 			left_ring="Petrov Ring",
-			right_ring="Apate Ring",
+			right_ring="Begrudging Ring",
 			back={ name="Updraft Mantle", augments={'STR+1','Pet: Breath+3','Weapon skill damage +3%',}},
 		}
         
@@ -299,16 +302,16 @@ function init_gear_sets()
        
         -- Normal melee group
         sets.engaged = {
-			ammo="Ginsen",
-			head={ name="Valorous Mask", augments={'Accuracy+30','"Store TP"+5','DEX+3','Attack+14',}},
+			ammo="Hasty Pinion +1",
+			head={ name="Valorous Mask", augments={'Accuracy+29','Weapon skill damage +1%','VIT+7','Attack+15',}},
 			body={ name="Found. Breastplate", augments={'Accuracy+14','Mag. Acc.+13','Attack+14','"Mag.Atk.Bns."+14',}},
-			hands={ name="Valorous Mitts", augments={'Accuracy+28','"Dbl.Atk."+4','Attack+3',}},
-			legs={ name="Valor. Hose", augments={'Accuracy+23','Damage taken-4%','AGI+6',}},
-			feet={ name="Founder's Greaves", augments={'VIT+9','Accuracy+14','"Mag.Atk.Bns."+13','Mag. Evasion+15',}},
-			neck="Asperity Necklace",
+			hands="Sulev. Gauntlets +1",
+			legs={ name="Valor. Hose", augments={'"Dbl.Atk."+3','AGI+5','Accuracy+11','Attack+8',}},
+			feet={ name="Valorous Greaves", augments={'Accuracy+30','"Dbl.Atk."+1','DEX+1','Attack+7',}},
+			neck="Lissome Necklace",
 			waist="Kentarch Belt +1",
-			left_ear="Steelflash Earring",
-			right_ear="Bladeborn Earring",
+			left_ear="Cessance Earring",
+			right_ear="Brutal Earring",
 			left_ring="Petrov Ring",
 			right_ring="Hetairoi Ring",
 			back={ name="Updraft Mantle", augments={'STR+1','Pet: Breath+3','Weapon skill damage +3%',}},
@@ -629,6 +632,11 @@ function relaxed_play_mode()
                 and not check_buffs('amnesia')
                 and check_recasts(s('Hasso')) then
             windower.send_command('Hasso')
+		elseif player.tp > 999
+                and player.target.hpp > 0
+                and player.target.distance < 6 
+				and not check_buffs('amnesia') then
+            windower.send_command(state.AutoWS.value)
 		--[[
         elseif check_recasts(s('Call Wyvern'))
                 and not check_buffs('amnesia')
@@ -679,4 +687,9 @@ end
 -------------------------------------------------------------------------------------------------------------------
 function select_default_macro_book()
 	set_macro_page(1, 16)
+end
+
+
+function set_lockstyle(num)
+	send_command('wait 2; input /lockstyleset '..num)
 end

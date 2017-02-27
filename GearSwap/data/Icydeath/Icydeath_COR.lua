@@ -62,6 +62,7 @@ function user_setup()
 	gear.weaponskill_waist = "Fotia Belt"
 	gear.weaponskill_neck = "Fotia Gorget"
     
+	set_lockstyle('4')
 end
 
 
@@ -202,7 +203,7 @@ function init_gear_sets()
 		head={ name="Herculean Helm", augments={'Mag. Acc.+16 "Mag.Atk.Bns."+16','Crit. hit damage +2%','STR+3','Mag. Acc.+15','"Mag.Atk.Bns."+11',}},
 		body={ name="Samnuha Coat", augments={'Mag. Acc.+11','"Mag.Atk.Bns."+10','"Fast Cast"+3',}},
 		hands={ name="Leyline Gloves", augments={'Accuracy+15','Mag. Acc.+15','"Mag.Atk.Bns."+15','"Fast Cast"+3',}},
-		legs={ name="Herculean Trousers", augments={'INT+7','"Mag.Atk.Bns."+20','Accuracy+5 Attack+5','Mag. Acc.+18 "Mag.Atk.Bns."+18',}},
+		legs={ name="Herculean Trousers", augments={'"Mag.Atk.Bns."+25','STR+2','Mag. Acc.+17 "Mag.Atk.Bns."+17',}},
 		feet={ name="Herculean Boots", augments={'Mag. Acc.+17 "Mag.Atk.Bns."+17','"Store TP"+1','STR+1','"Mag.Atk.Bns."+15',}},
 		neck="Sanctity Necklace",
 		waist="Fotia Belt",
@@ -218,7 +219,7 @@ function init_gear_sets()
 	-- MAB
 	sets.precast.WS['Leaden Salute'] = set_combine(sets.precast.WS['Wildfire'], {
 		head="Pixie Hairpin +1",
-		legs={ name="Herculean Trousers", augments={'INT+7','"Mag.Atk.Bns."+20','Accuracy+5 Attack+5','Mag. Acc.+18 "Mag.Atk.Bns."+18',}},
+		legs={ name="Herculean Trousers", augments={'"Mag.Atk.Bns."+25','STR+2','Mag. Acc.+17 "Mag.Atk.Bns."+17',}},
 		ring2="Archon Ring"
 	})
 
@@ -233,7 +234,7 @@ function init_gear_sets()
 		head={ name="Herculean Helm", augments={'Mag. Acc.+16 "Mag.Atk.Bns."+16','Crit. hit damage +2%','STR+3','Mag. Acc.+15','"Mag.Atk.Bns."+11',}},
 		body={ name="Samnuha Coat", augments={'Mag. Acc.+11','"Mag.Atk.Bns."+10','"Fast Cast"+3',}},
 		hands={ name="Leyline Gloves", augments={'Accuracy+15','Mag. Acc.+15','"Mag.Atk.Bns."+15','"Fast Cast"+3',}},
-		legs={ name="Herculean Trousers", augments={'INT+7','"Mag.Atk.Bns."+20','Accuracy+5 Attack+5','Mag. Acc.+18 "Mag.Atk.Bns."+18',}},
+		legs={ name="Herculean Trousers", augments={'"Mag.Atk.Bns."+25','STR+2','Mag. Acc.+17 "Mag.Atk.Bns."+17',}},
 		feet={ name="Herculean Boots", augments={'Mag. Acc.+17 "Mag.Atk.Bns."+17','"Store TP"+1','STR+1','"Mag.Atk.Bns."+15',}},
 		neck="Sanctity Necklace",
 		waist="Aquiline Belt",
@@ -606,4 +607,9 @@ function do_bullet_checks(spell, spellMap, eventArgs)
     elseif available_bullets.count > options.ammo_warning_limit and state.warned then
         state.warned:reset()
     end
+end
+
+
+function set_lockstyle(num)
+	send_command('wait 2; input /lockstyleset '..num)
 end

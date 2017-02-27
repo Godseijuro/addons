@@ -1,5 +1,23 @@
 return {
     ['Clubfoot'] = {
+        ['COR'] = {
+            ['Dagger'] = {
+                ['hps'] = {
+                    ['<'] = 100,
+                    ['>'] = 5
+                },
+                ['mobs'] = {},
+                ['ws_cmd'] = '/ws "Last Stand" <t>'
+            },
+            ['Sword'] = {
+                ['hps'] = {
+                    ['<'] = 100,
+                    ['>'] = 5
+                },
+                ['mobs'] = {},
+                ['ws_cmd'] = '/ws "Leaden Salute" <t>'
+            }
+        },
         ['PUP'] = {
             ['Hand-to-Hand'] = {
                 ['hps'] = {

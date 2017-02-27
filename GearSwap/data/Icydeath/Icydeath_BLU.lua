@@ -22,6 +22,8 @@ end
 
 -- Setup vars that are user-independent.  state.Buff vars initialized here will automatically be tracked.
 function job_setup()	
+	set_lockstyle('4')
+	
 	state.AutoMode = M{['description'] = 'Auto Mode(default: Off)'}
 	state.WSWhenHPGreaterThan = M{['description'] = 'WS When HP Greater Than(default: 0)'}
 	state.SelfCureWhenBelow = M{['description'] = 'Self Cure When Below(default: 30)'}
@@ -685,7 +687,7 @@ function init_gear_sets()
 	sets.engaged.DW.Acc.PDT.MaxHaste = {}
 
 		
-    sets.Weapons = {main="Tanmogayi +1", sub="Almace"}
+    sets.Weapons = {main="Almace", sub={ name="Colada", augments={'Crit.hit rate+3','DEX+14','Accuracy+17','DMG:+7',}}}
 
     sets.engaged.Nuke = {}
     sets.engaged.Learning = set_combine(sets.engaged, sets.Learning)
@@ -986,4 +988,8 @@ function select_self_cure()
 			windower.add_to_chat(8,'WARNING: No Cure spell is currently set!')
 		end
 	end
+end
+
+function set_lockstyle(num)
+	send_command('wait 2; input /lockstyleset '..num)
 end

@@ -1,3 +1,4 @@
+-- /con gs c toggle CP
 -------------------------------------------------------------------------------------------------------------------
 -- Setup functions for this job.  Generally should not be modified.
 -------------------------------------------------------------------------------------------------------------------
@@ -6,6 +7,7 @@
 function get_sets()
     mote_include_version = 2
 
+	include('organizer-lib')
     -- Load and initialize the include file.
     include('Mote-Include.lua')
 end
@@ -13,6 +15,10 @@ end
 
 -- Setup vars that are user-independent.  state.Buff vars initialized here will automatically be tracked.
 function job_setup()
+	state.AutoMode = M{['description'] = 'Auto Mode(default: Off)'}
+	state.AutoMode:options('Off', 'On')
+	AutoWS = "Blade: Hi"
+	
     state.Buff.Migawari = buffactive.migawari or false
     state.Buff.Doom = buffactive.doom or false
     state.Buff.Yonin = buffactive.Yonin or false
@@ -20,6 +26,31 @@ function job_setup()
     state.Buff.Futae = buffactive.Futae or false
 
     determine_haste_group()
+	
+	-- Event Register for AutoMode
+	windower.register_event('tp change', function(tp)
+        if tp > 100
+				and state.AutoMode.value == 'On'
+				and player.status == 'Engaged' then
+            relaxed_play_mode()
+        end
+    end)
+	
+	windower.register_event('time change', function(time)
+        if player.tp == 3000
+                and state.AutoMode.value == 'On'
+                and player.status == 'Engaged' then
+            relaxed_play_mode()
+        end
+    end)
+	
+	-- Map for auto activation of Berserk/Warcry based
+    -- on Weaponskills listed
+    berserk_warcry_automation = S{
+        'Blade: Hi',
+        'Blade: Ten',
+        'Blade: Jin',
+        'Blade: Shun'}
 end
 
 -------------------------------------------------------------------------------------------------------------------
@@ -33,26 +64,41 @@ function user_setup()
     state.WeaponskillMode:options('Normal', 'Acc', 'Mod')
     state.CastingMode:options('Normal', 'Resistant')
     state.PhysicalDefenseMode:options('PDT', 'Evasion')
-
+	
+	state.CP = M(false, "Capacity Points Mode")
+	
     gear.MovementFeet = {name="Danzo Sune-ate"}
     gear.DayFeet = "Danzo Sune-ate"
     gear.NightFeet = "Ninja Kyahan +1"
     
     select_movement_feet()
+	
     --select_default_macro_book()
+	set_lockstyle('4')
 end
 
 
 -- Define sets and vars used by this job file.
 function init_gear_sets()
-    --------------------------------------
-    -- Precast sets
-    --------------------------------------
+	sets.CP = {back="Mecisto. Mantle"}
+	
 	organizer_items = {
 		echos="Echo Drops",
-		shihei="Shihei",
-		capring="Capacity Ring"
+		ammo="Happo Shuriken",
+		ammopouch="Hap. Sh. Pouch",
+		shikabag="Toolbag (Shika)",
+		inoshibag="Toolbag (Ino)",
+		chonobag="Toolbag (Cho)",
+		shika="Shikanofuda",
+		inoshi="Inoshishinofunda",
+		chono="Chonofuda",
+		facility="Facility Ring",
+		capring="Capacity Ring",
 	}
+	
+	--------------------------------------
+    -- Precast sets
+    --------------------------------------
 	
     -- Precast sets to enhance JAs
     sets.precast.JA['Mijin Gakure'] = {} --legs="Mochizuki Hakama"
@@ -80,7 +126,10 @@ function init_gear_sets()
 		right_ear="Etiolation Earring",
 		left_ring="Prolix Ring",
 	}
-    sets.precast.FC.Utsusemi = set_combine(sets.precast.FC, {neck="Magoraga Beads"})
+    sets.precast.FC.Utsusemi = set_combine(sets.precast.FC, {
+		neck="Magoraga Beads",
+		body="Passion Jacket"
+	})
 
     -- Snapshot for ranged
     sets.precast.RA = {}
@@ -88,33 +137,30 @@ function init_gear_sets()
     -- Weaponskill sets
     -- Default set for any weaponskill that isn't any more specifically defined
     sets.precast.WS = {
-		ammo="Happo Shuriken",
+		ammo="Ginsen",
 		head={ name="Adhemar Bonnet", augments={'DEX+10','AGI+10','Accuracy+15',}},
-		body={ name="Adhemar Jacket", augments={'DEX+10','AGI+10','Accuracy+15',}},
-		hands={ name="Floral Gauntlets", augments={'Rng.Acc.+15','Accuracy+15','"Triple Atk."+3','Magic dmg. taken -4%',}},
-		legs={ name="Herculean Trousers", augments={'Accuracy+24 Attack+24','Weapon skill damage +1%','Attack+5',}},
-		feet={ name="Amm Greaves", augments={'HP+50','VIT+10','Accuracy+15','Damage taken-2%',}},
+		body={ name="Herculean Vest", augments={'Accuracy+3 Attack+3','Crit. hit damage +4%','DEX+9','Accuracy+7','Attack+1',}},
+		hands={ name="Herculean Gloves", augments={'Accuracy+23 Attack+23','Crit. hit damage +3%','STR+8','Attack+15',}},
+		legs={ name="Herculean Trousers", augments={'Accuracy+15','Crit. hit damage +3%','DEX+6','Attack+3',}},
+		feet={ name="Herculean Boots", augments={'Accuracy+24','Weapon skill damage +2%','AGI+9','Attack+12',}},
 		neck="Fotia Gorget",
 		waist="Fotia Belt",
-		left_ear="Steelflash Earring",
+		left_ear="Cessance Earring",
 		right_ear={ name="Moonshade Earring", augments={'"Mag.Atk.Bns."+4','TP Bonus +25',}},
 		left_ring="Petrov Ring",
-		right_ring="Cacoethic Ring +1",
-		back={ name="Yokaze Mantle", augments={'STR+3','Sklchn.dmg.+2%','Weapon skill damage +3%',}},
+		right_ring="Hetairoi Ring",
+		back={ name="Andartia's Mantle", augments={'AGI+20','Accuracy+20 Attack+20','Accuracy+10','Weapon skill damage +10%',}},
 	}
     sets.precast.WS.Acc = set_combine(sets.precast.WS, {})
 
     -- Specific weaponskill sets.  Uses the base set if an appropriate WSMod version isn't found.
-    --sets.precast.WS['Blade: Jin'] = set_combine(sets.precast.WS,
-    --    {neck="Rancor Collar",ear1="Brutal Earring",ear2="Moonshade Earring",feet="Daihanshi Habaki"})
+    sets.precast.WS['Blade: Jin'] = set_combine(sets.precast.WS, {})
 
-    --sets.precast.WS['Blade: Hi'] = set_combine(sets.precast.WS,
-    --    {head="Felistris Mask",hands="Hachiya Tekko",ring1="Stormsoul Ring",legs="Nahtirah Trousers"})
+    sets.precast.WS['Blade: Hi'] = set_combine(sets.precast.WS, {})
 
-    --sets.precast.WS['Blade: Shun'] = set_combine(sets.precast.WS, {feet="Daihanshi Habaki"})
+    sets.precast.WS['Blade: Shun'] = set_combine(sets.precast.WS, {})
 
-
-    --sets.precast.WS['Aeolian Edge'] = {}
+	sets.precast.WS['Aeolian Edge'] = set_combine(sets.precast.WS, {})
 
     
     --------------------------------------
@@ -123,7 +169,10 @@ function init_gear_sets()
 
     sets.midcast.FastRecast = {}
         
-    sets.midcast.Utsusemi = set_combine(sets.midcast.SelfNinjutsu, {}) --feet="Iga Kyahan +2"
+    sets.midcast.Utsusemi = {
+		back="Andartia's Mantle",
+		--feet="Iga Kyahan +2"
+	}
 
     sets.midcast.ElementalNinjutsu = {}
 
@@ -145,11 +194,11 @@ function init_gear_sets()
     
     -- Idle sets
     sets.idle = {
-		ammo="Demonry Stone",
+		ammo="Vanir Battery",
 		head={ name="Dampening Tam", augments={'DEX+9','Accuracy+13','Mag. Acc.+14','Quadruple Attack +2',}},
 		body="Mekosu. Harness",
 		hands="Kurys Gloves",
-		legs={ name="Herculean Trousers", augments={'Accuracy+23 Attack+23','"Dual Wield"+1','AGI+3','Accuracy+15','Attack+15',}},
+		legs={ name="Herculean Trousers", augments={'Accuracy+15','Crit. hit damage +3%','DEX+6','Attack+3',}},
 		feet={ name="Amm Greaves", augments={'HP+50','VIT+10','Accuracy+15','Damage taken-2%',}},
 		neck="Sanctity Necklace",
 		waist="Flume Belt +1",
@@ -192,19 +241,21 @@ function init_gear_sets()
     
     -- Normal melee group
     sets.engaged = {
-		ammo="Ginsen",
+		ammo="Happo Shuriken",
+		main={ name="Kanaria", augments={'Phys. dmg. taken -1%','STR+1','Accuracy+17','Attack+2','DMG:+20',}},
+		sub={ name="Kanaria", augments={'"Triple Atk."+2','DEX+4','Accuracy+23','Attack+19','DMG:+14',}},
 		head={ name="Dampening Tam", augments={'DEX+9','Accuracy+13','Mag. Acc.+14','Quadruple Attack +2',}},
 		body={ name="Adhemar Jacket", augments={'DEX+10','AGI+10','Accuracy+15',}},
-		hands={ name="Floral Gauntlets", augments={'Rng.Acc.+15','Accuracy+15','"Triple Atk."+3','Magic dmg. taken -4%',}},
-		legs={ name="Herculean Trousers", augments={'Accuracy+23 Attack+23','"Dual Wield"+1','AGI+3','Accuracy+15','Attack+15',}},
+		hands={ name="Herculean Gloves", augments={'Accuracy+21 Attack+21','"Triple Atk."+3','STR+9','Accuracy+15','Attack+9',}},
+		legs={ name="Samnuha Tights", augments={'STR+8','DEX+9','"Dbl.Atk."+3','"Triple Atk."+2',}},
 		feet={ name="Herculean Boots", augments={'Accuracy+25','"Triple Atk."+4','Attack+7',}},
-		neck="Lissome Necklace",
-		waist="Grunfeld Rope",
-		left_ear="Dudgeon Earring",
-		right_ear="Heartseeker Earring",
-		left_ring="Hetairoi Ring",
+		neck="Clotharius Torque",
+		waist="Windbuffet Belt +1",
+		left_ear="Cessance Earring",
+		right_ear="Brutal Earring",
+		left_ring="Petrov Ring",
 		right_ring="Epona's Ring",
-		back="Yokaze Mantle",
+		back="Bleating Mantle",
 	}
     sets.engaged.Acc = {}
     sets.engaged.Evasion = {}
@@ -213,21 +264,9 @@ function init_gear_sets()
     sets.engaged.Acc.PDT = {}
 
     -- Custom melee group: High Haste (~20% DW)
-    sets.engaged.HighHaste = {
-		ammo="Ginsen",
-		head={ name="Dampening Tam", augments={'DEX+9','Accuracy+13','Mag. Acc.+14','Quadruple Attack +2',}},
-		body={ name="Adhemar Jacket", augments={'DEX+10','AGI+10','Accuracy+15',}},
-		hands={ name="Floral Gauntlets", augments={'Rng.Acc.+15','Accuracy+15','"Triple Atk."+3','Magic dmg. taken -4%',}},
-		legs={ name="Herculean Trousers", augments={'Accuracy+23 Attack+23','"Dual Wield"+1','AGI+3','Accuracy+15','Attack+15',}},
-		feet={ name="Herculean Boots", augments={'Accuracy+25','"Triple Atk."+4','Attack+7',}},
-		neck="Lissome Necklace",
-		waist="Grunfeld Rope",
-		left_ear="Dudgeon Earring",
-		right_ear="Heartseeker Earring",
-		left_ring="Hetairoi Ring",
-		right_ring="Epona's Ring",
-		back="Yokaze Mantle",
-	}
+    sets.engaged.HighHaste = set_combine(sets.engaged, {
+	
+	})
     sets.engaged.Acc.HighHaste = {}
     sets.engaged.Evasion.HighHaste = {}
     sets.engaged.Acc.Evasion.HighHaste = {}
@@ -243,21 +282,9 @@ function init_gear_sets()
     sets.engaged.Acc.PDT.EmbravaHaste = {}
 
     -- Custom melee group: Max Haste (0% DW)
-    sets.engaged.MaxHaste = {
-		ammo="Ginsen",
-		head={ name="Dampening Tam", augments={'DEX+9','Accuracy+13','Mag. Acc.+14','Quadruple Attack +2',}},
-		body={ name="Adhemar Jacket", augments={'DEX+10','AGI+10','Accuracy+15',}},
-		hands={ name="Herculean Gloves", augments={'Accuracy+21 Attack+21','"Triple Atk."+3','STR+9','Accuracy+15','Attack+9',}},
-		legs="Samnuha Tights",
-		feet={ name="Herculean Boots", augments={'Accuracy+25','"Triple Atk."+4','Attack+7',}},
-		neck="Lissome Necklace",
-		waist="Grunfeld Rope",
-		left_ear="Steelflash Earring",
-		right_ear="Bladeborn Earring",
-		left_ring="Hetairoi Ring",
-		right_ring="Epona's Ring",
-		back="Yokaze Mantle",
-	}
+    sets.engaged.MaxHaste = set_combine(sets.engaged, {
+	
+	})
     sets.engaged.Acc.MaxHaste = {}
     sets.engaged.Evasion.MaxHaste = {}
     sets.engaged.Acc.Evasion.MaxHaste = {}
@@ -298,6 +325,23 @@ end
 -------------------------------------------------------------------------------------------------------------------
 -- Job-specific hooks for non-casting events.
 -------------------------------------------------------------------------------------------------------------------
+function job_precast(spell, action, spellMap, eventArgs)
+	-- Automates Aggressor/Berserk/Warcry for Warrior sub job
+    if state.AutoMode.value == 'On'
+			and berserk_warcry_automation:contains(spell.name)
+            and player.status == 'Engaged'
+            and player.sub_job == 'WAR'
+            and check_recasts(j('Aggressor'))
+            and not check_buffs(
+                'Amnesia',
+                'Berserk',
+                'Obliviscence',
+                'Paralysis') then
+        windower.send_command('aggressor; wait 1; berserk; wait 1; warcry; wait 1;'..spell.name..' '..spell.target.raw)
+        cancel_spell()
+        return
+    end
+end
 
 -- Called when a player gains or loses a buff.
 -- buff == buff gained or lost
@@ -344,6 +388,14 @@ function customize_idle_set(idleSet)
     if state.Buff.Doom then
         idleSet = set_combine(idleSet, sets.buff.Doom)
     end
+	
+	if state.CP.current == 'on' then
+		equip(sets.CP)
+		disable('back')
+	else
+		enable('back')
+	end
+	
     return idleSet
 end
 
@@ -368,6 +420,91 @@ end
 -------------------------------------------------------------------------------------------------------------------
 -- Utility functions specific to this job.
 -------------------------------------------------------------------------------------------------------------------
+function check_buffs(...)
+    --[[ Function Author: Arcon
+            Simple check before attempting to auto activate Job Abilities that
+            check active buffs and debuffs ]]
+    return table.any({...}, table.get+{buffactive})
+end
+
+function check_set_spells(...)
+    --[[ Function Author: Arcon
+            Used to pull list of currently set spells, this is useful for
+            determining traits such as Dual Wield IV
+            Also used to determine the Cure spell set, when used with a
+            self_command ]]
+    set_spells = set_spells
+        or gearswap.res.spells:type('BlueMagic'):rekey('name')
+        return table.all({...}, function(name)
+        return S(windower.ffxi.get_mjob_data().spells)
+        :contains(set_spells[name].id)
+    end)
+end
+
+do
+    --[[ Author: Arcon
+            The three next "do" sections are used to aid in checking recast
+            times, can check multiple recast times at once ]]
+    local cache = {}
+
+    function j(str)
+        if not cache[str] then
+            cache[str] = gearswap.res.job_abilities:with('name', str)
+        end
+
+        return cache[str]
+    end
+end
+
+do
+    local cache = {}
+
+    function s(str)
+        if not cache[str] then
+            cache[str] = gearswap.res.spells:with('name', str)
+        end
+
+        return cache[str]
+    end
+end
+
+do
+    local ja_types = S(gearswap.res.job_abilities:map(table.get-{'type'}))
+
+    function check_recasts(...)
+        local spells = S{...}
+
+        for spell in spells:it() do
+            local fn = 'get_' .. (ja_types:contains(spell.type)
+                    and 'ability'
+                    or 'spell') ..'_recasts'
+            if windower.ffxi[fn]()[spell.recast_id] > 0 then
+                return false
+            end
+        end
+
+        return true
+    end
+end
+
+
+-- MAKE A MACRO: /con gs c cycle AutoMode
+-- DEFAULT: Off
+function relaxed_play_mode()
+    -- This can be used as a mini bot to automate actions
+    if not midaction() then
+		if not check_buffs('Innin')
+				and check_recasts(j('Innin')) then
+			windower.send_command('Innin')
+        elseif player.tp > 999
+                and player.target.hpp > 0
+                and player.target.distance < 6 
+				and not check_buffs('amnesia') then
+            windower.send_command(AutoWS)
+        end
+    end
+end
+
 
 function determine_haste_group()
     -- We have three groups of DW in gear: Hachiya body/legs, Iga head + Patentia Sash, and DW earrings
@@ -433,4 +570,8 @@ function select_default_macro_book()
     else
         set_macro_page(1, 3)
     end
+end
+
+function set_lockstyle(num)
+	send_command('wait 2; input /lockstyleset '..num)
 end

@@ -48,6 +48,7 @@ function user_setup()
 	send_command('bind !- gs c cycle targetmode')
     send_command('bind != gs c toggle CapacityMode')
 	--select_default_macro_book()
+	set_lockstyle('4')
 end
 
 
@@ -523,3 +524,6 @@ function select_default_macro_book()
 	end
 end
 
+function set_lockstyle(num)
+	send_command('wait 2; input /lockstyleset '..num)
+end

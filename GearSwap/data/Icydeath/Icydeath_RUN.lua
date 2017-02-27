@@ -66,6 +66,7 @@ function user_setup()
 	gear.weaponskill_waist = "Fotia Belt"
 	gear.weaponskill_neck = "Fotia Gorget"
 	--select_default_macro_book()
+	set_lockstyle('3')
 end
 
 
@@ -114,7 +115,7 @@ function init_gear_sets()
 		hands={ name="Leyline Gloves", augments={'Accuracy+15','Mag. Acc.+15','"Mag.Atk.Bns."+15','"Fast Cast"+3',}},
 		legs="Erilaz Leg Guards",
 		feet="Erilaz Greaves",
-		neck="Stoicheion Medal",
+		neck="Sanctity Necklace",
 		waist="Yamabuki-no-Obi",
 		left_ear="Friomisi Earring",
 		right_ear="Hecate's Earring",
@@ -254,7 +255,7 @@ function init_gear_sets()
 		hands="Kurys Gloves",
 		legs="Erilaz Leg Guards",
 		feet="Skd. Jambeaux +1",
-		neck="Lissome Necklace",
+		neck="Sanctity Necklace",
 		waist="Flume Belt +1",
 		left_ear="Ethereal Earring",
 		right_ear="Infused Earring",
@@ -264,8 +265,8 @@ function init_gear_sets()
 	}
 		
     sets.idle.Refresh = set_combine(sets.idle, {
-		head=empty,
-		body="Respite Cloak",
+		head="Rawhide Mask",
+		body="Mekosu. Harness",
 		hands={ name="Herculean Gloves", augments={'AGI+7','Crit.hit rate+1','"Refresh"+2','Accuracy+5 Attack+5','Mag. Acc.+9 "Mag.Atk.Bns."+9',}},
 		waist="Fucho-no-obi"
 	})
@@ -277,6 +278,7 @@ function init_gear_sets()
 		hands="Runeist Mitons +1",
 		legs="Erilaz Leg Guards",
 		feet="Erilaz Greaves",
+		neck="Twilight Torque",
 		waist="Flume Belt +1",
 		left_ear="Ethereal Earring",
 		right_ear="Infused Earring",
@@ -369,7 +371,7 @@ function init_gear_sets()
 		back={ name="Evasionist's Cape", augments={'Enmity+2','"Embolden"+14','"Dbl.Atk."+1','Damage taken-4%',}},
 	}
 		
-    sets.engaged.repulse = {back="Repulse Mantle"}
+    sets.engaged.repulse = {} --back="Repulse Mantle"
 	
 	count_msg_mecisto = 0
 end
@@ -619,3 +621,8 @@ windower.raw_register_event('status change',function(new, old)
         reset_timers()
     end
 end)
+
+
+function set_lockstyle(num)
+	send_command('wait 2; input /lockstyleset '..num)
+end

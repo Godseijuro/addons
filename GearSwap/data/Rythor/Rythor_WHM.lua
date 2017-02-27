@@ -26,8 +26,10 @@ function user_setup()
     state.OffenseMode:options('None', 'Normal')
     state.CastingMode:options('Normal', 'Resistant')
     state.IdleMode:options('Normal', 'PDT')
-
-    select_default_macro_book()
+	state.CP = M(false, "Capacity Points Mode")
+	
+    --select_default_macro_book()
+	set_lockstyle('1')
 end
 
 -- Define sets and vars used by this job file.
@@ -39,20 +41,44 @@ function init_gear_sets()
     -- Precast Sets
 
     -- Fast cast sets for spells
-    sets.precast.FC = {}
+    sets.precast.FC = {
+		ammo="Impatiens",
+		body="Vrikodara Jupon",
+		hands="Fanatic Gloves",
+		legs="Aya. Cosciales +1",
+		feet="Regal Pumps +1",
+		waist="Witful Belt",
+		left_ear="Etiolation Earring",
+		right_ear="Loquac. Earring",
+		back="Ogapepo Cape",
+	}
         
-    sets.precast.FC['Enhancing Magic'] = set_combine(sets.precast.FC, {waist="Siegel Sash"})
+    sets.precast.FC['Enhancing Magic'] = set_combine(sets.precast.FC, {
+		main="Vadose Rod", 
+		waist="Siegel Sash", 
+		legs="Ebers Pantaloons +1"
+	})
 
     sets.precast.FC.Stoneskin = set_combine(sets.precast.FC['Enhancing Magic'], {
 		head="Umuthi Hat"
-		
 	})
 
-    sets.precast.FC['Healing Magic'] = set_combine(sets.precast.FC, {legs="Ebers Pantaloons +1"})
+    sets.precast.FC['Healing Magic'] = set_combine(sets.precast.FC, {main="Vadose Rod", legs="Ebers Pantaloons +1"})
 
     sets.precast.FC.StatusRemoval = sets.precast.FC['Healing Magic']
 
-    sets.precast.FC.Cure = set_combine(sets.precast.FC['Healing Magic'], {ammo="Impatiens"})
+    sets.precast.FC.Cure = {
+		sub="Sors Shield",
+		head={ name="Kaykaus Mitra", augments={'MP+60','"Cure" spellcasting time -5%','Enmity-5',}},
+		body="Ebers Bliaud +1",
+		hands={ name="Telchine Gloves", augments={'"Cure" spellcasting time -6%',}},
+		legs="Ebers Pant. +1",
+		feet="Litany Clogs",
+		waist="Witful Belt",
+		left_ear="Nourish. Earring",
+		right_ear="Nourish. Earring +1",
+		back="Ogapepo Cape",
+	}
 
     sets.precast.FC.Curaga = sets.precast.FC['Healing Magic']
     
@@ -76,34 +102,76 @@ function init_gear_sets()
     sets.midcast.FastRecast = {}
     
     -- Cure sets
+    sets.midcast.CureSolace = {
+		main={ name="Queller Rod", augments={'Healing magic skill +15','"Cure" potency +10%','"Cure" spellcasting time -7%',}},
+		sub="Sors Shield",
+		ammo="Impatiens",
+		head={ name="Kaykaus Mitra", augments={'MP+60','"Cure" spellcasting time -5%','Enmity-5',}},
+		body="Ebers Bliaud +1",
+		hands={ name="Telchine Gloves", augments={'"Cure" spellcasting time -6%',}},
+		legs="Ebers Pant. +1",
+		feet="Regal Pumps +1",
+		neck="Nodens Gorget",
+		waist="Gishdubar Sash",
+		left_ear="Glorious Earring",
+		right_ear="Nourish. Earring +1",
+		left_ring="Stikini Ring",
+		right_ring="Sirona's Ring",
+		back="Oretan. Cape +1",
+	}
 
-    sets.midcast.CureSolace = {}
-
-    sets.midcast.Cure = {}
+    sets.midcast.Cure = set_combine(sets.midcast.CureSolace, {
+	
+	})
 
 	-- Healing magic, MND
-    sets.midcast.Curaga = {}
+    sets.midcast.Curaga = set_combine(sets.midcast.Cure, {})
 
     sets.midcast.CureMelee = {}
 
-    sets.midcast.Cursna = {}
+    sets.midcast.Cursna = {
+		main={ name="Queller Rod", augments={'Healing magic skill +15','"Cure" potency +10%','"Cure" spellcasting time -7%',}},
+		sub="Thuellaic Ecu +1",
+		ammo="Impatiens",
+		head={ name="Kaykaus Mitra", augments={'MP+60','"Cure" spellcasting time -5%','Enmity-5',}},
+		body="Ebers Bliaud +1",
+		hands={ name="Fanatic Gloves", augments={'MP+45','Healing magic skill +9','"Conserve MP"+6','"Fast Cast"+5',}},
+		legs="Ebers Pant. +1",
+		feet="Gende. Galoshes",
+		neck="Mizu. Kubikazari",
+		waist="Cascade Belt",
+		left_ear="Nourish. Earring",
+		right_ear="Nourish. Earring +1",
+		right_ring="Ephedra Ring",
+		left_ring="Ephedra Ring",
+		back="Alaunus's Cape",
+	}
 
     sets.midcast.StatusRemoval = {}
 
     -- 110 total Enhancing Magic Skill; caps even without Light Arts
-    sets.midcast['Enhancing Magic'] = {}
+    sets.midcast['Enhancing Magic'] = {
+		head="Chironic Hat",
+		back="Mending Cape",
+		waist="Cascade Belt",
+		feet="Regal Pumps +1",
+		ring1="Stikini Ring",
+		
+	}
 
-    sets.midcast.Stoneskin = {}
+    sets.midcast.Stoneskin = set_combine(sets.midcast['Enhancing Magic'], {
+		neck="Nodens Gorget"
+	})
 
-    sets.midcast.Auspice = {}
+    sets.midcast.Auspice = set_combine(sets.midcast['Enhancing Magic'], {})
 
-    sets.midcast.BarElement = {}
+    sets.midcast.BarElement = set_combine(sets.midcast['Enhancing Magic'], {})
 
-    sets.midcast.Regen = {}
+    sets.midcast.Regen = set_combine(sets.midcast['Enhancing Magic'], {})
 
-    sets.midcast.Protectra = {}
+    sets.midcast.Protectra = set_combine(sets.midcast['Enhancing Magic'], {})
 
-    sets.midcast.Shellra = {}
+    sets.midcast.Shellra = set_combine(sets.midcast['Enhancing Magic'], {})
 
 
     sets.midcast['Divine Magic'] = {}
@@ -123,7 +191,23 @@ function init_gear_sets()
     
 
     -- Idle sets (default idle set not needed since the other three are defined, but leaving for testing purposes)
-    sets.idle = {}
+    sets.idle = {
+		main="Bolelabunga",
+		sub="Genbu's Shield",
+		ammo="Homiliary",
+		head="Aya. Zucchetto +1",
+		body="Ebers Bliaud +1",
+		hands="Aya. Manopolas +1",
+		legs="Assid. Pants +1",
+		feet="Aya. Gambieras +1",
+		neck="Sanctity Necklace",
+		waist="Gishdubar Sash",
+		left_ear="Etiolation Earring",
+		right_ear={ name="Moonshade Earring", augments={'Mag. Acc.+4','Latent effect: "Refresh"+1',}},
+		left_ring="Renaye Ring",
+		right_ring="Sirona's Ring",
+		back="Solemnity Cape",
+	}
 
     sets.idle.PDT = sets.idle
 
@@ -154,11 +238,56 @@ function init_gear_sets()
 
     -- Buff sets: Gear that needs to be worn to actively enhance a current player buff.
     sets.buff['Divine Caress'] = {hands="Orison Mitts +2",back="Mending Cape"}
+	
+	sets.CP = {back="Mecisto. Mantle"}
 end
 
 -------------------------------------------------------------------------------------------------------------------
 -- Job-specific hooks for standard casting events.
 -------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------
+--Pretarget
+-------------------------------------------------------------------------
+function job_auto_change_target(spell, action, spellMap, eventArgs)
+	eventArgs = {handled = false, PCTargetMode = state.PCTargetMode.value, SelectNPCTargets = state.SelectNPCTargets.value}
+end
+
+function pretarget(spell, action, spellMap, eventArgs)
+	job_auto_change_target(spell, action, spellMap, eventArgs)
+    if (spell.type:endswith('Magic') or spell.type == "Ninjutsu") and buffactive.silence then -- Auto Use Echo Drops If You Are Silenced --
+		cancel_spell()
+		send_command('input /item "Echo Drops" <me>')
+	elseif buffactive['Light Arts'] or buffactive['Addendum: White'] then
+		if spell.english == "Light Arts" and not buffactive['Addendum: White'] then
+			cancel_spell()
+			send_command('input /ja Addendum: White <me>')
+		elseif spell.english == "Manifestation" then
+			cancel_spell()
+			send_command('input /ja Accession <me>')
+		elseif spell.english == "Alacrity" then
+			cancel_spell()
+			send_command('input /ja Celerity <me>')
+		elseif spell.english == "Parsimony" then
+			cancel_spell()
+			send_command('input /ja Penury <me>')
+		end
+	elseif buffactive['Dark Arts'] or buffactive['Addendum: Black'] then
+		if spell.english == "Dark Arts" and not buffactive['Addendum: Black'] then
+			cancel_spell()
+			send_command('input /ja Addendum: Black <me>')
+		elseif spell.english == "Accession" then
+			cancel_spell()
+			send_command('input /ja Manifestation <me>')
+		elseif spell.english == "Celerity" then
+			cancel_spell()
+			send_command('input /ja Alacrity <me>')
+		elseif spell.english == "Penury" then
+			cancel_spell()
+			send_command('input /ja Parsimony <me>')
+		end
+    end
+end
 
 -- Set eventArgs.handled to true if we don't want any automatic gear equipping to be done.
 -- Set eventArgs.useMidcastGear to true if we want midcast gear equipped on precast.
@@ -250,6 +379,14 @@ function customize_idle_set(idleSet)
     if player.mpp < 51 then
         idleSet = set_combine(idleSet, sets.latent_refresh)
     end
+	
+	if state.CP.current == 'on' then
+		equip(sets.CP)
+		disable('back')
+	else
+		enable('back')
+	end
+	
     return idleSet
 end
 
@@ -287,4 +424,8 @@ end
 function select_default_macro_book()
     -- Default macro set/book
     set_macro_page(1, 1)
+end
+
+function set_lockstyle(num)
+	send_command('wait 2; input /lockstyleset '..num)
 end

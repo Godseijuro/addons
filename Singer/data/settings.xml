@@ -1,0 +1,108 @@
+<?xml version="1.1" ?>
+<settings>
+    <global>
+        <actions>false</actions>
+        <active>true</active>
+        <box>
+            <bg>
+                <alpha>255</alpha>
+                <blue>0</blue>
+                <green>0</green>
+                <red>0</red>
+                <visible>true</visible>
+            </bg>
+            <flags>
+                <bold>false</bold>
+                <bottom>false</bottom>
+                <draggable>true</draggable>
+                <italic>false</italic>
+                <right>false</right>
+            </flags>
+            <padding>0</padding>
+            <pos>
+                <x>0</x>
+                <y>0</y>
+            </pos>
+            <text>
+                <alpha>255</alpha>
+                <blue>255</blue>
+                <font>Arial</font>
+                <fonts>
+
+                </fonts>
+                <green>255</green>
+                <red>255</red>
+                <size>10</size>
+                <stroke>
+                    <alpha>255</alpha>
+                    <blue>0</blue>
+                    <green>0</green>
+                    <red>0</red>
+                    <width>0</width>
+                </stroke>
+            </text>
+        </box>
+        <buffs>
+            <haste>icydeath,eldiablo,clubfoot</haste>
+            <refresh>combat,gorby</refresh>
+        </buffs>
+        <clarion>
+            <aoe>minuet</aoe>
+        </clarion>
+        <delay>4</delay>
+        <dummy>Knight&apos;s Minne,Knight&apos;s Minne II</dummy>
+        <ignore />
+        <marcato>Sentinel&apos;s Scherzo</marcato>
+        <max_ws>99</max_ws>
+        <min_ws>1</min_ws>
+        <pianissimo>false</pianissimo>
+        <recast>
+            <buff>
+                <max>10</max>
+                <min>5</min>
+            </buff>
+            <song>
+                <max>25</max>
+                <min>20</min>
+            </song>
+        </recast>
+        <song>
+            <combat>
+                <ballad>1</ballad>
+            </combat>
+            <eldiablo>
+                <prelude>1</prelude>
+            </eldiablo>
+        </song>
+        <songs>
+            <march>2</march>
+            <minuet>1</minuet>
+        </songs>
+        <timers>true</timers>
+    </global>
+    <rythor>
+        <box>
+            <pos>
+                <x>1250</x>
+                <y>738</y>
+            </pos>
+            <text>
+                <fonts>
+
+                </fonts>
+                <stroke>
+                    <alpha>-2.7386800471527e+014</alpha>
+                </stroke>
+            </text>
+        </box>
+        <clarion>
+            <aoe>ballad</aoe>
+        </clarion>
+        <dummy>Valor Minuet IV,Valor Minuet III</dummy>
+        <marcato>Valor Minuet V</marcato>
+        <pianissimo>true</pianissimo>
+        <songs>
+            <march>1</march>
+        </songs>
+    </rythor>
+</settings>

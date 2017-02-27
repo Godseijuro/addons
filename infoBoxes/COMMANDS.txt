@@ -1,0 +1,3 @@
+ib reset		:	Resets the accuracy box
+ib track [id]	:	Tracks a mob by ID
+ib untrack [id] :	Stops tracking mob by ID
