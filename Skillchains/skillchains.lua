@@ -1,7 +1,51 @@
-_addon.author = 'Ivaar'
+--[[
+Copyright © 2017, Ivaar
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright
+  notice, this list of conditions and the following disclaimer.
+* Redistributions in binary form must reproduce the above copyright
+  notice, this list of conditions and the following disclaimer in the
+  documentation and/or other materials provided with the distribution.
+* Neither the name of SkillChains nor the
+  names of its contributors may be used to endorse or promote products
+  derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL Ivaar BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+]]
+
+
+_addon.author = 'Ivaar,Sammeh(Mod)'
 _addon.command = 'sc'
 _addon.name = 'SkillChains'
-_addon.version = '1.15.07.05'
+_addon.version = '1.6.2'
+
+
+-- Sammeh(Quetz) Mods.
+-- 1.2 Added Pet Ready Moves
+-- 1.3 Color coding Pet Moves vs WS
+-- 1.3.1 bugfix for non-pet jobs
+-- 1.3.2 Add trigger 'hidews' to Hide main/ranged WS and only show pet jobs.  //sc hidews
+-- 1.4 Add colors to WS properties and Magic Bursts
+-- 1.5 Fix - broke jobs other than BST when coloring bst stuff ;)
+-- 1.5.1 Testing this thing sucks between pet jobs and not lol.  Anyway i think fixed :\
+-- 1.5.2 Updated to add some more pet WS properties
+-- 1.6.0 Adding in Umbra/Radiance properties/skillchains. 
+-- 1.6.1 Fix where when you lose a pet-mid fight spammed console log with nil values.  
+-- 1.6.2 Removing some unnecessary comments and loaded variables during debugs.
+
 
 texts = require('texts')
 packets = require('packets')
@@ -11,8 +55,9 @@ res = require('resources')
 default = {
     ws=true,
     ma=true,
+	hidews=true, -- only used to hide ws if main job == BST
     display = {
-        text={size=10,font='Consolas'},
+        text={size=8,font='Consolas'},
         pos={x=0,y=0},
         },
     }
@@ -21,10 +66,29 @@ settings = config.load(default)
 skill_props = texts.new('',settings.display,settings)
 
 lvl3 = S{'Darkness','Light'}
+lvl4 = S{'Radiance','Umbra'}
+radiance_ws = S{'Blade: Shun','Apex Arrow','Last Stand','Exenterator','Realmrazor','Resolution','Shijin Spiral','Tachi: Shoha','Upheaval'}
+umbra_ws = S{'Shattersoul','Entropy','Requiescat','Ruinator','Stardiver'}
+aeonic_weapons = S{'Heishi Shorinken','Godhands','Aeneas','Sequence','Lionheart','Tri-edge','Chango','Anguta','Trishula','Dojikiri Yasutsuna','Tishtrya','Khatvanga','Fail-Not','Fomalhaut'}
+
+aftermath_props = T{
+	['Blade: Shun'] = {skillchain_a="Light",skillchain_b="Fusion",skillchain_c="Impaction"}, 
+	['Apex Arrow'] = {skillchain_a="Light",skillchain_b="Fragmentation",skillchain_c="Transfixion"}, 
+	['Last Stand'] = {skillchain_a="Light",skillchain_b="Fusion",skillchain_c="Reverberation"}, 
+	['Exenterator'] = {skillchain_a="Light",skillchain_b="Fragmentation",skillchain_c="Scission"}, 
+	['Realmrazor'] = {skillchain_a="Light",skillchain_b="Fusion",skillchain_c="Impaction"}, 
+	['Resolution'] = {skillchain_a="Light",skillchain_b="Fragmentation",skillchain_c="Scission"}, 
+	['Shijin Spiral'] = {skillchain_a="Light",skillchain_b="Fusion",skillchain_c="Reverberation"}, 
+	['Tachi: Shoha'] = {skillchain_a="Light",skillchain_b="Fragmentation",skillchain_c="Compression"}, 
+	['Upheaval'] = {skillchain_a="Light",skillchain_b="Fusion",skillchain_c="Compression"}, 
+	['Shattersoul'] = {skillchain_a="Darkness",skillchain_b="Gravitation",skillchain_c="Induration"}, 
+	['Entropy'] = {skillchain_a="Darkness",skillchain_b="Gravitation",skillchain_c="Reverberation"}, 
+	['Requiescat'] = {skillchain_a="Darkness",skillchain_b="Gravitation",skillchain_c="Scission"}, 
+	['Ruinator'] = {skillchain_a="Darkness",skillchain_b="Distortion",skillchain_c="Detonation"}, 
+	['Stardiver'] = {skillchain_a="Darkness",skillchain_b="Gravitation",skillchain_c="Transfixion"}, 
+}
 
 skillchains = L{
-    --[767] = 'Radiance',
-   -- [768] = 'Umbra',
     [288] = 'Light',
     [289] = 'Darkness',
     [290] = 'Gravitation',
@@ -39,8 +103,6 @@ skillchains = L{
     [299] = 'Scission',
     [300] = 'Detonation',
     [301] = 'Impaction',
-    --[769] = 'Radiance',
-    --[770] = 'Umbra',
     [385] = 'Light',
     [386] = 'Darkness',
     [387] = 'Gravitation',
@@ -55,7 +117,35 @@ skillchains = L{
     [396] = 'Scission',
     [397] = 'Detonation',
     [398] = 'Impaction',
+	[767] = 'Radiance',
+    [768] = 'Umbra',
+    [769] = 'Radiance',
+    [770] = 'Umbra',
     }
+
+colors = {
+    ['Impaction'] = '\\cs(255,0,255)',
+	['Lightning'] = '\\cs(255,0,255)',
+	['Darkness'] = '\\cs(0,0,204)',
+	['Umbra'] = '\\cs(0,0,204)',
+    ['Gravitation'] = '\\cs(102,51,0)',
+    ['Fragmentation'] = '\\cs(250,156,247)',
+    ['Distortion'] = '\\cs(51,153,255)',
+    ['Compression'] = '\\cs(0,0,204)',
+	['Induration'] = '\\cs(0,255,255)',
+	['Ice'] = '\\cs(0,255,255)',
+    ['Reverberation'] = '\\cs(0,0,255)',
+	['Water'] = '\\cs(0,0,255)',
+    ['Transfixion'] = '\\cs(255,255,255)',
+    ['Scission'] = '\\cs(153,76,0)',
+	['Stone'] = '\\cs(153,76,0)',
+	['Earth'] = '\\cs(153,76,0)',
+    ['Detonation'] = '\\cs(102,255,102)',
+	['Wind'] = '\\cs(102,255,102)',
+    ['Fusion'] = '\\cs(255,102,102)',
+    ['Liquefaction'] = '\\cs(255,0,0)',
+	['Fire'] = '\\cs(255,0,0)',
+}
     
 elements = L{
     [0]={mb='Fire',sc='Liquefaction'},
@@ -65,17 +155,19 @@ elements = L{
     [4]={mb='Lightning',sc='Impaction'},
     [5]={mb='Water',sc='Reverberation'},
     [6]={mb='Light',sc='Transfixion'},
-    [7]={mb='Dark',sc='Compression'},
+    [7]={mb='Darkness',sc='Compression'},
     }
 
 prop_info = {
+	Radiance = {elements='Fire Wind Lightning Light',properties={[1]={Light='Light'}},level=3},
+	Umbra = {elements='Earth Ice Water Darkness',properties={[1]={Darkness='Darkness'}},level=3},
     Light = {elements='Fire Wind Lightning Light',properties={[1]={Light='Light'}},level=3},
-    Darkness = {elements='Earth Ice Water Dark',properties={[1]={Darkness='Darkness'}},level=3},
-    Gravitation = {elements='Earth Dark',properties={[1]={Distortion='Darkness'},[2]={Fragmentation='Fragmentation'}},level=2},
+    Darkness = {elements='Earth Ice Water Darkness',properties={[1]={Darkness='Darkness'}},level=3},
+    Gravitation = {elements='Earth Darkness',properties={[1]={Distortion='Darkness'},[2]={Fragmentation='Fragmentation'}},level=2},
     Fragmentation = {elements='Wind Lightning',properties={[1]={Fusion='Light'},[2]={Distortion='Distortion'}},level=2},
     Distortion = {elements='Ice Water',properties={[1]={Gravitation='Darkness'},[2]={Fusion='Fusion'}},level=2},
     Fusion = {elements='Fire Light',properties={[1]={Fragmentation='Light'},[2]={Gravitation='Gravitation'}},level=2},
-    Compression = {elements='Dark',properties={[1]={Transfixion='Transfixion'},[2]={Detonation='Detonation'}},level=1},
+    Compression = {elements='Darkness',properties={[1]={Transfixion='Transfixion'},[2]={Detonation='Detonation'}},level=1},
     Liquefaction = {elements='Fire',properties={[1]={Impaction='Fusion'},[2]={Scission='Scission'}},level=1},
     Induration = {elements='Ice',properties={[1]={Reverberation='Fragmentation'},[2]={Compression='Compression'},[3]={Impaction='Impaction'}},level=1},
     Reverberation = {elements='Water',properties={[1]={Induration='Induration'},[2]={Impaction='Impaction'}},level=1},
@@ -84,32 +176,38 @@ prop_info = {
     Detonation = {elements='Wind',properties={[1]={['Compression']='Gravitation'},[2]={['Scission']='Compression'}},level=1},
     Impaction = {elements='Lightning',properties={[1]={Liquefaction='Liquefaction'},[2]={Detonation='Detonation'}},level=1},
     }
+	
+	
     
 blood_pacts = L{
     [513] = {id=513,avatar='Carbuncle',en='Poison Nails',skillchain_a='Transfixion'},
     [521] = {id=521,avatar='Cait Sith',en='Regal Scratch',skillchain_a='Scission'},
+	[780] = {id=780,avatar='Cait Sith',en='Regal Gash',skillchain_a='Distortion',skillchain_b='Detonation'},
     [528] = {id=528,avatar='Fenrir',en='Moonlit Charge',skillchain_a='Compression'},
     [529] = {id=529,avatar='Fenrir',en='Crescent Fang',skillchain_a='Transfixion'},
-    [534] = {id=534,avatar='Fenrir',en='Eclipse Bite',skillchain_a='Gravitation'},
+    [534] = {id=534,avatar='Fenrir',en='Eclipse Bite',skillchain_a='Gravitation',skillchain_b='Scission'},
     [544] = {id=544,avatar='Ifrit',en='Punch',skillchain_a='Liquefaction'},
     [546] = {id=546,avatar='Ifrit',en='Burning Strike',skillchain_a='Impaction'},   
     [547] = {id=547,avatar='Ifrit',en='Double Punch',skillchain_a='Compression'},
-    [550] = {id=550,avatar='Ifrit',en='Flaming Crush',skillchain_a='Fusion'},
+    [550] = {id=550,avatar='Ifrit',en='Flaming Crush',skillchain_a='Fusion',skillchain_b='Reverberation'},
     [560] = {id=560,avatar='Titan',en='Rock Throw',skillchain_a='Scission'},
     [562] = {id=562,avatar='Titan',en='Rock Buster',skillchain_a='Reverberation'},
     [563] = {id=563,avatar='Titan',en='Megalith Throw',skillchain_a='Induration'},
-    [566] = {id=566,avatar='Titan',en='Mountain Buster',skillchain_a='Gravitation'},
+    [566] = {id=566,avatar='Titan',en='Mountain Buster',skillchain_a='Gravitation',skillchain_b='Induration'},
+	[570] = {id=570,avatar='Titan',en='Crag Throw',skillchain_a='Gravitation',skillchain_b='Scission'},
     [576] = {id=576,avatar='Leviathan',en='Barracuda Dive',skillchain_a='Reverberation'},
     [578] = {id=578,avatar='Leviathan',en='Tail Whip',skillchain_a='Detonation'},
-    [582] = {id=582,avatar='Leviathan',en='Spinning Dive',skillchain_a='Distortion'},
+    [582] = {id=582,avatar='Leviathan',en='Spinning Dive',skillchain_a='Distortion',skillchain_b='Detonation'},
     [592] = {id=592,avatar='Garuda',en='Claw',skillchain_a='Detonation'},
-    [598] = {id=598,avatar='Garuda',en='Predator Claws',skillchain_a='Fragmentation'},
+    [598] = {id=598,avatar='Garuda',en='Predator Claws',skillchain_a='Fragmentation',skillchain_b='Scission'},
     [608] = {id=608,avatar='Shiva',en='Axe Kick',skillchain_a='Induration'},
     [612] = {id=612,avatar='Shiva',en='Double Slap',skillchain_a='Scission'},
-    [614] = {id=614,avatar='Shiva',en='Rush',skillchain_a='Distortion'},
+    [614] = {id=614,avatar='Shiva',en='Rush',skillchain_a='Distortion',skillchain_b='Scission'},
     [624] = {id=624,avatar='Ramuh',en='Shock Strike',skillchain_a='Impaction'}, 
-    [630] = {id=630,avatar='Ramuh',en='Chaotic Strike',skillchain_a='Fragmentation'},
+    [630] = {id=630,avatar='Ramuh',en='Chaotic Strike',skillchain_a='Fragmentation',skillchain_b='Transfixion'},
+	[634] = {id=634,avatar='Ramuh',en="Volt Strike",skillchain_a='Fragmentation',skillchain_b='Scission'},
     [656] = {id=656,avatar='Diabolos',en='Camisado',skillchain_a='Compression'},
+	[667] = {id=667,avatar='Diabolos',en='Blindside',skillchain_a='Gravitation',skillchain_b='Transfixion'},
     }
     
 blue_magic = L{
@@ -169,7 +267,7 @@ blue_magic = L{
 npc_move = L{
     -- Automaton
     [1940] = {id=1940,en='Chimera Ripper',skillchain_a='Detonation',skillchain_b='Induration'},
-    [1941] = {id=1941,en='String Clipper',skillchain_a='Scission',skillchain_b='Icon Scission'},
+    [1941] = {id=1941,en='String Clipper',skillchain_a='Scission',skillchain_b='Scission'},
     [1942] = {id=1942,en='Arcuballista',skillchain_a='Liquefaction',skillchain_b='Transfixion'},
     [1943] = {id=1943,en='Slapstick',skillchain_a='Reverberation',skillchain_b='Impaction'},
     [2065] = {id=2065,en='Cannibal Blade',skillchain_a='Compression',skillchain_b='Reverberation'},
@@ -205,9 +303,6 @@ npc_move = L{
     --[3356] = {id=3356,trust='Abenzio',en='Uppercut',skillchain_a='',skillchain_b='',skillchain_c=''},
     --[3357] = {id=3357,trust='Abenzio',en='Antiphase',skillchain_a='',skillchain_b='',skillchain_c=''},
     --[3358] = {id=3358,trust='Abenzio',en='Blank Gaze',skillchain_a='',skillchain_b='',skillchain_c=''},
-    -- [3411] = {id=3411,trust='Amchuchu',en='Power Slash',skillchain_a='Transfixion',skillchain_b='',skillchain_c=''},
-    -- [3412] = {id=3412,trust='Amchuchu',en='Freezebite',skillchain_a='Induration',skillchain_b='Detonation',skillchain_c=''},
-
     [3418] = {id=3418,trust='Tenzen',en='Amatsu: Torimai',skillchain_a='Transfixion',skillchain_b='Scission',skillchain_c=''},
     [3419] = {id=3419,trust='Tenzen',en='Amatsu: Kazakiri',skillchain_a='Scission',skillchain_b='Detonation',skillchain_c=''},
     [3420] = {id=3420,trust='Tenzen',en='Amatsu: Yukiarashi',skillchain_a='Induration',skillchain_b='Detonation',skillchain_c=''},
@@ -223,24 +318,6 @@ npc_move = L{
     [3493] = {id=3493,trust='Lion',en='Powder Keg',skillchain_a='Fusion',skillchain_b='Compression',skillchain_c=''},
     [3494] = {id=3494,trust='Lion',en='Walk the Plank',skillchain_a='Light',skillchain_b='Distortion',skillchain_c=''},
     [3495] = {id=3495,trust='Zeid',en='Ground Strike',skillchain_a='Fragmentation',skillchain_b='Distortion',skillchain_c=''},
-
-    [3537] = {id=3537,trust='Robel-Akbel',en='Quietus Sphere',skillchain_a='Darkness',skillchain_b='Gravitation',skillchain_c=''},
-    [3538] = {id=3538,trust='Robel-Akbel',en='Null Blast',skillchain_a='Fragmentation',skillchain_b='',skillchain_c=''},
-
-    -- [3580] = {id=3580,trust='Arciela',en='Harmonic Displacement',skillchain_a='Reverberation',skillchain_b='',skillchain_c=''},
-    -- [3582] = {id=3582,trust='Arciela',en='Darkest Hour',skillchain_a='Gravitation',skillchain_b='',skillchain_c=''},
-    -- [3585] = {id=3585,trust='Arciela',en="Naakual's Vengeance",skillchain_a='Induration',skillchain_b='',skillchain_c=''},
-    -- [3700] = {id=3700,trust='Arciela',en='Harmonic Displacement',skillchain_a='Reverberation',skillchain_b='',skillchain_c=''},
-    -- [3702] = {id=3702,trust='Arciela',en='Darkest Hour',skillchain_a='Gravitation',skillchain_b='',skillchain_c=''},
-    -- [3705] = {id=3705,trust='Arciela',en="Naakual's Vengeance",skillchain_a='Induration',skillchain_b='',skillchain_c=''},
-
-    [3732] = {id=3732,trust='Iroha',en="Amatsu: Fuga",skillchain_a='Impaction',skillchain_b='',skillchain_c=''},
-    [3733] = {id=3733,trust='Iroha',en="Amatsu: Kyori",skillchain_a='Induration',skillchain_b='',skillchain_c=''},
-    [3734] = {id=3734,trust='Iroha',en="Amatsu: Hanadoki",skillchain_a='Reverberation',skillchain_b='Scission',skillchain_c=''},
-    [3735] = {id=3735,trust='Iroha',en="Amatsu: Choun",skillchain_a='Liquefaction',skillchain_b='',skillchain_c=''},
-    [3736] = {id=3736,trust='Iroha',en="Amatsu: Gachirin",skillchain_a='Light',skillchain_b='Fragmentation',skillchain_c=''},
-    [3737] = {id=3737,trust='Iroha',en="Amatsu: Suien",skillchain_a='Fusion',skillchain_b='Liquefaction',skillchain_c=''},
-
     -- Jug Pet
     [3840] = {id=3840,en='Foot Kick',skillchain_a='Reverberation',skillchain_b=''},
     [3842] = {id=3842,en='Whirl Claws',skillchain_a='Impaction',skillchain_b=''},
@@ -274,19 +351,66 @@ npc_move = L{
     [3911] = {id=3911,en='Chomp Rush',skillchain_a='Darkness',skillchain_b='Gravitation'},
     [3915] = {id=3915,en='Back Heel',skillchain_a='Reverberation',skillchain_b=''},
     [3919] = {id=3919,en='Tortoise Stomp',skillchain_a='Liquefaction',skillchain_b=''},
-    [3922] = {id=3922,en='Wing Slap',skillchain_a='Liquefaction',skillchain_b='Scission'},
+    [3922] = {id=3922,en='Wing Slap',skillchain_a='Gravitation',skillchain_b='Liquefaction'},
     [3923] = {id=3923,en='Beak Lunge',skillchain_a='Scission',skillchain_b=''},
     [3925] = {id=3925,en='Recoil Dive',skillchain_a='Transfixion',skillchain_b=''},
     [3927] = {id=3927,en='Sensilla Blades',skillchain_a='Scission',skillchain_b=''},
     [3928] = {id=3928,en='Tegmina Buffet',skillchain_a='Distortion',skillchain_b='Detonation'},
     [3930] = {id=3930,en='Swooping Frenzy',skillchain_a='Fusion',skillchain_b='Reverberation'},
     [3931] = {id=3931,en='Sweeping Gouge',skillchain_a='Induration',skillchain_b=''},
-    [3933] = {id=3933,en='Pentapeck',skillchain_a='Distortion',skillchain_b=''},
+    [3933] = {id=3933,en='Pentapeck',skillchain_a='Distortion',skillchain_b='Light'},
     [3934] = {id=3934,en='Tickling Tendrils',skillchain_a='Impaction',skillchain_b=''},
     [3938] = {id=3938,en='Somersault',skillchain_a='Compression',skillchain_b=''},
     [3941] = {id=3941,en='Pecking Flurry',skillchain_a='Transfixion',skillchain_b=''},
     [3942] = {id=3942,en='Sickle Slash',skillchain_a='Transfixion',skillchain_b=''},
     }
+	
+pet_moves = T{
+    [3840] = {id=3840,en='Foot Kick',skillchain_a='Reverberation',skillchain_b=''},
+    [3842] = {id=3842,en='Whirl Claws',skillchain_a='Impaction',skillchain_b=''},
+    [3843] = {id=3843,en='Head Butt',skillchain_a='Detonation',skillchain_b=''},
+    [3845] = {id=3845,en='Wild Oats',skillchain_a='Transfixion',skillchain_b=''},
+    [3846] = {id=3846,en='Leaf Dagger',skillchain_a='Scission',skillchain_b=''},
+    [3849] = {id=3849,en='Razor Fang',skillchain_a='Impaction',skillchain_b=''},
+    [3850] = {id=3850,en='Claw Cyclone',skillchain_a='Scission',skillchain_b=''},
+    [3851] = {id=3851,en='Tail Blow',skillchain_a='Impaction',skillchain_b=''},
+    [3853] = {id=3853,en='Blockhead',skillchain_a='Reverberation',skillchain_b=''},
+    [3854] = {id=3854,en='Brain Crush',skillchain_a='Liquefaction',skillchain_b=''},
+    [3857] = {id=3857,en='Lamb Chop',skillchain_a='Impaction',skillchain_b=''},
+    [3859] = {id=3859,en='Sheep Charge',skillchain_a='Reverberation',skillchain_b=''},
+    [3863] = {id=3863,en='Big Scissor',skillchain_a='Scission',skillchain_b=''},
+    [3866] = {id=3866,en='Needleshot',skillchain_a='Transfixion',skillchain_b=''},
+    [3867] = {id=3867,en='??? Needles',skillchain_a='Darkness',skillchain_b='Fragmentation'},
+    [3868] = {id=3868,en='Frog Kick',skillchain_a='Compression',skillchain_b=''},
+    [3875] = {id=3875,en='Power Attack',skillchain_a='Induration',skillchain_b=''},
+    [3877] = {id=3877,en='Rhino Attack',skillchain_a='Detonation',skillchain_b=''},
+    [3885] = {id=3885,en='Mandibular Bite',skillchain_a='Detonation',skillchain_b=''},
+    [3891] = {id=3891,en='Nimble Snap',skillchain_a='Impaction',skillchain_b=''},
+    [3892] = {id=3892,en='Cyclotail',skillchain_a='Impaction',skillchain_b=''},
+    [3894] = {id=3894,en='Double Claw',skillchain_a='Liquefaction',skillchain_b=''},
+    [3895] = {id=3895,en='Grapple',skillchain_a='Reverberation',skillchain_b=''},
+    [3897] = {id=3897,en='Spinning Top',skillchain_a='Impaction',skillchain_b=''},
+    [3900] = {id=3900,en='Suction',skillchain_a='Compression',skillchain_b=''},
+    [3904] = {id=3904,en='Sudden Lunge',skillchain_a='Impaction',skillchain_b=''},
+    [3905] = {id=3905,en='Spiral Spin',skillchain_a='Scission',skillchain_b=''},
+    [3909] = {id=3909,en='Scythe Tail',skillchain_a='Liquefaction',skillchain_b=''},
+    [3910] = {id=3910,en='Ripper Fang',skillchain_a='Induration',skillchain_b=''},
+    [3911] = {id=3911,en='Chomp Rush',skillchain_a='Darkness',skillchain_b='Gravitation'},
+    [3915] = {id=3915,en='Back Heel',skillchain_a='Reverberation',skillchain_b=''},
+    [3919] = {id=3919,en='Tortoise Stomp',skillchain_a='Liquefaction',skillchain_b=''},
+    [3922] = {id=3922,en='Wing Slap',skillchain_a='Gravitation',skillchain_b='Liquefaction'},
+    [3923] = {id=3923,en='Beak Lunge',skillchain_a='Scission',skillchain_b=''},
+    [3925] = {id=3925,en='Recoil Dive',skillchain_a='Transfixion',skillchain_b=''},
+    [3927] = {id=3927,en='Sensilla Blades',skillchain_a='Scission',skillchain_b=''},
+    [3928] = {id=3928,en='Tegmina Buffet',skillchain_a='Distortion',skillchain_b='Detonation'},
+    [3930] = {id=3930,en='Swooping Frenzy',skillchain_a='Fusion',skillchain_b='Reverberation'},
+    [3931] = {id=3931,en='Sweeping Gouge',skillchain_a='Induration',skillchain_b=''},
+    [3933] = {id=3933,en='Pentapeck',skillchain_a='Distortion',skillchain_b='Light'},
+    [3934] = {id=3934,en='Tickling Tendrils',skillchain_a='Impaction',skillchain_b=''},
+    [3938] = {id=3938,en='Somersault',skillchain_a='Compression',skillchain_b=''},
+    [3941] = {id=3941,en='Pecking Flurry',skillchain_a='Transfixion',skillchain_b=''},
+    [3942] = {id=3942,en='Sickle Slash',skillchain_a='Transfixion',skillchain_b=''},
+}
 
 function apply_props(packet,abil,ability)
     if not abil then return end
@@ -303,14 +427,29 @@ function apply_props(packet,abil,ability)
         (reson.chain or reson.ws.skillchain_a == abil.skillchain_a) then
             closed = true
         end
+		if lvl4:contains(skillchain) then
+			closed = true
+		end
         resonating[mob_id] = {active={skillchain},timer=now,ws=abil,chain=true,closed=closed,step=step}
-    elseif L{110,161,162,185,187}:contains(packet['Target 1 Action 1 Message']) then           
+    elseif L{110,161,162,185,187}:contains(packet['Target 1 Action 1 Message']) then 
+		local aeonic,aftermath_lvl = aeonicinfo()
+		if radiance_ws:contains(abil.en) or umbra_ws:contains(abil.en) then 
+			if aeonic and aftermath_lvl then 
+				abil.skillchain_c = aftermath_props[abil.en].skillchain_c
+				abil.skillchain_b = aftermath_props[abil.en].skillchain_b
+				abil.skillchain_a = aftermath_props[abil.en].skillchain_a
+			else 
+				abil.skillchain_c = ''
+				abil.skillchain_b = aftermath_props[abil.en].skillchain_c
+				abil.skillchain_a = aftermath_props[abil.en].skillchain_b
+			end
+		end
         resonating[mob_id] = {active={abil.skillchain_a,abil.skillchain_b,abil.skillchain_c},timer=now,ws=abil,chain=false,step=1}
     elseif L{317}:contains(packet['Target 1 Action 1 Message']) then
         resonating[mob_id] = {active={abil.skillchain_a},timer=now,ws=abil,chain=false,step=1}
-    -- elseif ability == 'spells' and chain_ability.sch[packet.Actor] then
-    --     resonating[mob_id] = {active={active},timer=now,ws=abil,chain=false,step=1}
-    --     chain_ability.sch[packet.Actor] = nil
+    elseif ability == 'spells' and chain_ability.sch[packet.Actor] then
+        resonating[mob_id] = {active={active},timer=now,ws=abil,chain=false,step=1}
+        chain_ability.sch[packet.Actor] = nil
     elseif ability == 'blue_magic' and packet['Target 1 Action 1 Message'] == 2 and 
     (chain_ability.azure[packet.Actor] or chain_ability.blu[packet.Actor]) then
         resonating[mob_id] = {active={abil.skillchain_a,abil.skillchain_b},timer=now,ws=abil,chain=false,step=1}
@@ -345,19 +484,23 @@ function burst_results(reson)
 end
 
 function chain_results(reson)
-    local skills,spells = {},{}
+    local skills,spells,petskills,petskills_ext = {},{},{},{}
     local m_job = windower.ffxi.get_player().main_job
     local abilities = windower.ffxi.get_abilities()
     local spell_table,sch
+	local aeonic,aftermath_lvl = aeonicinfo()
     if m_job == 'SMN' then
         spell_table = blood_pacts
     elseif m_job == 'BLU' then
         spell_table = blue_magic
+	elseif m_job == 'BST' then
+		spell_table = pet_moves
     elseif m_job == 'SCH' and settings.ma then
         sch = true
     end
     for key,element in ipairs(reson.active) do
         local props = prop_info[element].properties
+		
         for x=1,#props do
             for k,v in pairs(props[x]) do
                 local lvl = prop_info[v].level
@@ -386,19 +529,100 @@ function chain_results(reson)
                     end
                 end
                 if settings.ws then
-                    for i,t in ipairs(abilities.weapon_skills) do
-                        local ws = res.weapon_skills[t]
-                        if ws and S{ws.skillchain_a,ws.skillchain_b,ws.skillchain_c}:contains(k) and
-                        (not skills[ws.en] or skills[ws.en].lvl < lvl) then
-                            skills[ws.en] = {lvl=lvl,prop=v}
-                        end
-                    end
+					if m_job == 'BST' and settings.hidews == true then	
+						-- Don't show any normal Melee WS :D
+					else
+						for i,t in ipairs(abilities.weapon_skills) do
+							local ws = res.weapon_skills[t]
+							
+							if radiance_ws:contains(ws.en) or umbra_ws:contains(ws.en) then		
+								if aeonic and aftermath_lvl and reson.step > 0 then
+									ws.skillchain_c = aftermath_props[ws.en].skillchain_c
+									ws.skillchain_b = aftermath_props[ws.en].skillchain_b
+									ws.skillchain_a = aftermath_props[ws.en].skillchain_a
+								end
+							end
+							
+							if ws and S{ws.skillchain_a,ws.skillchain_b,ws.skillchain_c}:contains(k) and
+							(not skills[ws.en] or skills[ws.en].lvl < lvl) then
+								skills[ws.en] = {lvl=lvl,prop=v}
+							end
+						end
+					end
+					if m_job == 'BST' then
+						petskills = pet_skills()
+						for index,value in pairs(petskills) do
+							for index2,value2 in pairs(pet_moves) do
+								if value == value2.en then
+									if S{value2.skillchain_a,value2.skillchain_b}:contains(k) then
+										petskills_ext[value] = {lvl=lvl,prop=v}
+									end
+								end
+							
+							end
+						end
+					end
                 end
             end
         end
     end
-    return {[1]=skills,[2]=spells}
+    return {[1]=skills,[2]=spells,[3]=petskills_ext}
 end
+
+function pet_skills()
+	local abilities = windower.ffxi.get_abilities()
+	local petskills = {}
+	if windower.ffxi.get_mob_by_target('pet') then 
+		pet = windower.ffxi.get_mob_by_index(windower.ffxi.get_mob_by_target('pet').index or 0)
+	else 
+		pet = nil
+	end
+	if pet then 
+		for key,ability in pairs(abilities.job_abilities) do
+			local ability_en = res.job_abilities[ability].en
+			local ability_targets = res.job_abilities[ability].targets
+			local ability_type = res.job_abilities[ability].type
+			local ability_charges = res.job_abilities[ability].mp_cost
+			if ability_targets.Self == true and ability_type == 'Monster' then
+				table.insert(petskills, ability_en)
+			end
+		end
+	end
+	return petskills
+end
+
+function search_pet_moves(k)
+	for i,v in pairs(pet_moves) do
+		if v.en == k then
+			return true
+		end
+	end
+end
+
+function aeonicinfo()
+	local buffs = windower.ffxi.get_player().buffs
+	local gear = windower.ffxi.get_items()
+	local mainweapon = res.items[windower.ffxi.get_items(gear.equipment.main_bag, gear.equipment.main).id].en
+	local aftermath_lvl = nil
+	local aeonic_found = nil
+	
+	for i,v in pairs(buffs) do
+		if v == 272 then
+			aftermath_lvl = 3
+		elseif v == 271 then
+			aftermath_lvl = 2
+		elseif v == 270 then
+			aftermath_lvl = 1
+		end
+	end
+	
+	if aeonic_weapons:contains(mainweapon) then 
+		aeonic_found = true
+	end
+	
+	return aeonic_found,aftermath_lvl
+end
+
 
 function display_results(targ)
     local str = ''
@@ -408,7 +632,11 @@ function display_results(targ)
         for i,t in ipairs(results) do
             for k,v in pairs(t) do
                 if v and v.lvl == x then
-                    str = '\n %s  >> Lv.%d %s ':format(k,v.lvl,v.prop)..str
+					if search_pet_moves(k) then 
+						str = '\n \\cs(0,255,0)%s\\cs(255,255,255)  >> Lv.%d %s ':format(k,v.lvl,v.prop)..str
+					else
+						str = '\n %s  >> Lv.%d %s ':format(k,v.lvl,v.prop)..str
+					end
                 end
             end
         end
@@ -434,6 +662,9 @@ windower.register_event('prerender', function()
         elseif now-resonating[targ.id].timer < 10 then
             disp_info = ' GO! %s \n':format(10-(now-resonating[targ.id].timer))..disp_info
         end
+		for i,v in pairs(colors) do
+			disp_info = string.gsub(disp_info, i, v..i..'\\cs(255,255,255)')
+		end
         skill_props:text(disp_info)
         skill_props:show()
     elseif not visible then
@@ -456,9 +687,11 @@ windower.register_event('incoming chunk', function(id,original,modified,injected
             if abil and abil.skill == 43 then
                 abil = blue_magic[packet.Param]
                 apply_props(packet,abil,'blue_magic')
-            -- elseif abil and abil.skill == 36 then
-            --     abil.skillchain_a = elements[abil.element].sc
-            --     apply_props(packet,abil,'spells')
+            elseif abil and abil.skill == 36 then
+				if elements[abil.element] then 
+                abil.skillchain_a = elements[abil.element].sc
+                apply_props(packet,abil,'spells')
+				end
             end
         -- Job Ability
         elseif packet['Category'] == 6 then
@@ -500,7 +733,7 @@ windower.register_event('addon command', function(...)
             return
         end
         visible = false
-    elseif S{'ma','ws'}:contains(commands[1]) then
+    elseif S{'ma','ws','hidews'}:contains(commands[1]) then
         if not commands[2] then
             settings[commands[1]] = not settings[commands[1]]
         elseif commands[2] == 'off' then
@@ -508,7 +741,10 @@ windower.register_event('addon command', function(...)
         elseif commands[2] == 'on' then
             settings[commands[1]] = true
         end
-        windower.add_to_chat(207, '%s will %s be displayed.':format(commands[1] == 'ma' and 'Magic' or 'Weapon Skills',settings[commands[1]] and 'now' or 'NOT'))
+        --windower.add_to_chat(207, '%s will %s be displayed.':format(commands[1] == 'ma' and 'Magic' or 'Weapon Skills',settings[commands[1]] and 'now' or 'NOT'))
+		windower.add_to_chat(207, '%s: %s.':format(commands[1],settings[commands[1]] and 'TRUE' or 'FALSE'))
+	elseif commands[1] == 'save' then
+        config.save(settings, 'all')
     elseif commands[1] == 'eval' then
         assert(loadstring(table.concat(commands, ' ',2)))()
     end

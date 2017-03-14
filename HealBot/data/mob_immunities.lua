@@ -35,5 +35,8 @@ return {
         5,
         13
     },
+    ['Yaguarogui'] = S{
+        12
+    },
     ['_comment'] = 'This file is automatically updated with buff IDs as immunities are discovered'
 }

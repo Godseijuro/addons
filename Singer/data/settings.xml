@@ -44,7 +44,7 @@
         </box>
         <buffs>
             <haste>icydeath,eldiablo,clubfoot</haste>
-            <refresh>combat,gorby</refresh>
+            <refresh />
         </buffs>
         <clarion>
             <aoe>minuet</aoe>
@@ -70,11 +70,12 @@
             <combat>
                 <ballad>1</ballad>
             </combat>
-            <eldiablo>
-                <prelude>1</prelude>
-            </eldiablo>
+            <icybreath>
+                <ballad>1</ballad>
+            </icybreath>
         </song>
         <songs>
+            <madrigal>1</madrigal>
             <march>2</march>
             <minuet>1</minuet>
         </songs>
@@ -83,26 +84,21 @@
     <rythor>
         <box>
             <pos>
-                <x>1250</x>
-                <y>738</y>
+                <x>1267</x>
+                <y>696</y>
             </pos>
             <text>
                 <fonts>
 
                 </fonts>
                 <stroke>
-                    <alpha>-2.7386800471527e+014</alpha>
+                    <alpha>-4.8962404919586e+033</alpha>
                 </stroke>
             </text>
         </box>
-        <clarion>
-            <aoe>ballad</aoe>
-        </clarion>
         <dummy>Valor Minuet IV,Valor Minuet III</dummy>
         <marcato>Valor Minuet V</marcato>
         <pianissimo>true</pianissimo>
-        <songs>
-            <march>1</march>
-        </songs>
+        <timers>false</timers>
     </rythor>
 </settings>

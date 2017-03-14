@@ -52,12 +52,15 @@
     </icydeath>
     <rythor>
         <pos>
-            <x>1605</x>
-            <y>440</y>
+            <x>1359</x>
+            <y>853</y>
         </pos>
         <text>
+            <fonts>
+
+            </fonts>
             <stroke>
-                <alpha>-64770</alpha>
+                <alpha>16516605</alpha>
             </stroke>
         </text>
     </rythor>

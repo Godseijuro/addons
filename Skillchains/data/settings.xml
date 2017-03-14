@@ -40,21 +40,23 @@
                 </stroke>
             </text>
         </display>
+        <hidews>true</hidews>
         <ma>true</ma>
         <ws>true</ws>
     </global>
     <clubfoot>
         <display>
             <pos>
-                <x>222</x>
-                <y>743</y>
+                <x>1052</x>
+                <y>847</y>
             </pos>
             <text>
                 <fonts>
 
                 </fonts>
+                <size>8</size>
                 <stroke>
-                    <alpha>-64770</alpha>
+                    <alpha>16516605</alpha>
                 </stroke>
             </text>
         </display>
@@ -66,6 +68,7 @@
                 <y>759</y>
             </pos>
             <text>
+                <size>8</size>
                 <stroke>
                     <alpha>-64770</alpha>
                 </stroke>
@@ -79,6 +82,7 @@
                 <y>91</y>
             </pos>
             <text>
+                <size>8</size>
                 <stroke>
                     <alpha>-64770</alpha>
                 </stroke>
@@ -92,10 +96,25 @@
                 <y>118</y>
             </pos>
             <text>
+                <size>8</size>
                 <stroke>
                     <alpha>-2.7386800471527e+014</alpha>
                 </stroke>
             </text>
         </display>
     </lygre>
+    <rythor>
+        <display>
+            <pos>
+                <x>172</x>
+                <y>746</y>
+            </pos>
+            <text>
+                <size>8</size>
+                <stroke>
+                    <alpha>-64770</alpha>
+                </stroke>
+            </text>
+        </display>
+    </rythor>
 </settings>

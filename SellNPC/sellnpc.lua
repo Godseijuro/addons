@@ -69,7 +69,13 @@ end
 
 function cmd(...)
     local commands = {...}
-    if commands[1] then
+	if commands[1] == "mg" then
+		mg = GetFileAsArray("MogGardenItems.txt")
+		for i, item in ipairs(mg) do
+		  check_item(item)
+		end
+		print('Done Selling items from MogGardenItems.txt')
+    elseif commands[1] then
         check_item(table.concat(commands,' ',1))
     elseif appraised then
         check_que()
@@ -87,3 +93,25 @@ windower.register_event('incoming chunk', function(id, original, modified, injec
         appraised = {}
     end
 end)
+
+function GetFileAsArray(filename)
+	local file = io.open(script_path()..'\\'..filename)
+	local tbllines = {}
+	local i = 0
+	if file then
+		for line in file:lines() do
+		 i = i + 1
+		 tbllines[i] = line
+		end
+		file:close()
+	else
+		print('file not found: '..filename)
+	end
+	
+	return tbllines
+end
+
+function script_path()
+   local str = debug.getinfo(2, "S").source:sub(2)
+   return str:match("(.*/)")
+end

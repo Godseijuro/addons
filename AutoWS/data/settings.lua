@@ -15,7 +15,7 @@ return {
                     ['>'] = 5
                 },
                 ['mobs'] = {},
-                ['ws_cmd'] = '/ws "Leaden Salute" <t>'
+                ['ws_cmd'] = '/ws "Savage Blade" <t>'
             }
         },
         ['PUP'] = {

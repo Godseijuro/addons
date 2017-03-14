@@ -30,7 +30,6 @@ function get_sets()
 	WeaponLock = 'OFF' -- Press ctrl + F10 for Weapon Lock--	
 	Capacity = 'OFF' -- Press Ctrl +F11 to have Capacity cape locked on while Idle, Change the cape at line 28 --
 -- Gears --
--- Gears --
     gear = {} -- Fill these --
 	gear.Capacity_Cape = {name="Mecisto. Mantle"} -- The cape you use for capacity --
 	gear.Refresh_Head = {name="Amalric Coif"} -- Add refresh effect + head if you want to use it, it not leave {} empty --	
@@ -42,250 +41,222 @@ function get_sets()
     Town = S{"Ru'Lude Gardens","Upper Jeuno","Lower Jeuno","Port Jeuno","Port Windurst","Windurst Waters","Windurst Woods","Windurst Walls","Heavens Tower",
 	         "Port San d'Oria","Northern San d'Oria","Southern San d'Oria","Port Bastok","Bastok Markets","Bastok Mines","Metalworks","Aht Urhgan Whitegate",
 	         "Tavnazian Safehold","Nashmau","Selbina","Mhaura","Norg","Eastern Adoulin","Western Adoulin","Kazham","Heavens Tower"}
-	---- Precast ----
+	
+---- Precast ----
+
     sets.precast = {}
 	
 	-- Base Set --
 	sets.precast.FC = {
-		range={ name="Dunna", augments={'MP+20','Mag. Acc.+10','"Fast Cast"+3',}},
-		head={ name="Merlinic Hood", augments={'Mag. Acc.+15','"Fast Cast"+7','CHR+1',}},
-		body="Vrikodara Jupon",
-		hands={ name="Merlinic Dastanas", augments={'Mag. Acc.+23','"Fast Cast"+5','INT+10','"Mag.Atk.Bns."+7',}},
-		legs="Geo. Pants +1",
-		feet="Regal Pumps +1",
-		waist="Channeler's Stone",
-		left_ear="Loquac. Earring",
-		right_ear="Etiolation Earring",
-		back={ name="Lifestream Cape", augments={'Geomancy Skill +9','Indi. eff. dur. +13','Pet: Damage taken -3%','Damage taken-2%',}}
+		range="Dunna",
+		head="Haruspex Hat",
+		legs="Geomancy Pants",
+		feet="Chelona Boots",
+		neck={ name="Jeweled Collar", augments={'"Fast Cast"+1','INT+2',}},
+		right_ear="Loquac. Earring",
+		back={ name="Lifestream Cape", augments={'Geomancy Skill +10','Indi. eff. dur. +12','Pet: Damage taken -2%',}},
 	}
-    sets.precast.Geomancy = set_combine(sets.precast.FC, {})	
-    sets.precast.Indi = set_combine(sets.precast.Geomancy, {}) 		
-    sets.precast.Cure = set_combine(sets.precast.FC, {
-		main="Vadose Rod",
-		sub="Sors Shield",
-		ammo="Impatiens",
-		hands="Telchine Gloves",
-		waist="Witful Belt",
-		back="Ogapepo Cape",
+	
+    sets.precast.Geomancy = set_combine(sets.precast.FC, {
+	
+	})	
+    
+	sets.precast.Indi = set_combine(sets.precast.Geomancy, {
+	
+	}) 		
+    
+	sets.precast.Cure = set_combine(sets.precast.FC, {
+		back="Pahtli Cape"
 	})
-    sets.precast.Enhancing = set_combine(sets.precast.FC, {})
-    sets.precast['Stoneskin'] = set_combine(sets.precast.FC, {
+	
+    sets.precast.Enhancing = set_combine(sets.precast.FC, {
 		waist="Siegel Sash"
 	})
+    
+	sets.precast['Stoneskin'] = set_combine(sets.precast.Enhancing, {
+		head="Umuthi Hat",
+	})
+	
 	sets.precast.Elemental = set_combine(sets.precast.FC, {
 		neck="Stoicheion Medal",
 		left_ear="Barkaro. Earring",
 		hands="Bagua Mitaines"	
 	})
+	
 	sets.precast['Impact'] = set_combine(sets.precast.FC, { -- Make sure to leave the head empty --
 	    head=empty,
-        body="Twilight Cloak"})	
--- Job Abilities --
+        body="Twilight Cloak"
+	})	
+
+	-- Job Abilities --
     sets.JA ={}
-    sets.JA['Bolster'] = {body="Bagua Tunic +1"}
-	sets.JA['Full Circle'] = {head="Azimuth Hood +1"}
+    sets.JA['Bolster'] = {body="Bagua Tunic"}
+	sets.JA['Full Circle'] = {head="Azimuth Hood"}
     sets.JA['Life Cycle'] = {body="Geomancy Tunic", back="Nantosuelta's Cape"}
-	sets.JA['Radial Arcana'] = {feet="Bagua Sandals +1"}
--- Weaponskills --
+	sets.JA['Radial Arcana'] = {feet="Bagua Sandals"}
+
+	-- Weaponskills --
 	sets.WS = {} -- Your base set for ws's --
     sets.WS['Realmrazer'] = set_combine(sets.WS, {})
     sets.WS['Exudation'] = set_combine(sets.WS, {})	
+
 ---- Midcast ----
-    sets.midcast = {}
+
+	sets.midcast = {}
     -- Base Set --	
     sets.midcast.Recast = set_combine(sets.precast.FC, {})
--- Healing Magic --
+
+	-- Healing Magic --
     sets.midcast.Cure = {
-		main="Tamaxchi",
-		sub="Sors Shield",
-		head={ name="Merlinic Hood", augments={'Mag. Acc.+27','"Drain" and "Aspir" potency +7','MND+8','"Mag.Atk.Bns."+4',}},
-		body="Vrikodara Jupon",
-		hands="Telchine Gloves",
-		legs="Geo. Pants +1",
-		feet="Regal Pumps +1",
-		neck="Phalaina Locket",
-		waist="Gishdubar Sash",
-		left_ring="Sirona's Ring",
-		right_ring="Stikini Ring",
-		back="Solemnity Cape",
+		main="Tefnut Wand"
 	}
 	sets.midcast.Cure.Weather = set_combine(sets.midcast.Cure, {
-		waist="Korin Obi"
+		
 	})
     sets.midcast.Cure.WeaponLock = set_combine(sets.midcast.Cure, {
-		body="Vrikodara Jupon",
-		hands="Serpentes Cuffs",
-		legs="Geo. Pants +1",
-		feet="Regal Pumps +1",
-		neck="Phalaina Locket",
-		waist="Cascade Belt",
-		left_ring="Sirona's Ring",
-		right_ring="Stikini Ring",
-		back="Oretan. Cape +1",
+		
 	})
 	sets.midcast['Cursna'] = set_combine(sets.midcast.Cure, {
-	    feet="Regal Pumps +1",
-		neck="Phi Necklace",
-		waist="Gishdubar Sash",
-		right_ring="Ephedra Ring",
-		left_ring="Ephedra Ring",
-		back="Oretan. Cape +1",
+	
 	})
 	
     -- Enhancing Magic --		
 	sets.midcast.Duration = {
 		main="Bolelabunga",
-		range={ name="Dunna", augments={'MP+20','Mag. Acc.+10','"Fast Cast"+3',}},
-		head={ name="Merlinic Hood", augments={'Mag. Acc.+27','"Drain" and "Aspir" potency +7','MND+8','"Mag.Atk.Bns."+4',}},
-		body="Vrikodara Jupon",
-		hands={ name="Merlinic Dastanas", augments={'Mag. Acc.+23','"Fast Cast"+5','INT+10','"Mag.Atk.Bns."+7',}},
-		legs="Geo. Pants +1",
-		feet="Regal Pumps +1",
-		neck="Mizu. Kubikazari",
-		waist="Cascade Belt",
-		left_ring="Tamas Ring",
-		right_ring="Stikini Ring",
-		back="Prism Cape",
+		head="Umuthi Hat"
 	}
     sets.midcast['Phalanx'] = set_combine(sets.midcast.Duration, {})				
     sets.midcast['Stoneskin'] = set_combine(sets.midcast.Duration, {})	
-    sets.midcast['Aquaveil'] = set_combine(sets.midcast.Duration, {main="Vadose Rod", head="Amalric Coif"})
--- Enfeebling Magic --	
+    sets.midcast['Aquaveil'] = set_combine(sets.midcast.Duration, {
+		main="Vadose Rod", 
+		head="Amalric Coif"
+	})
+	
+	-- Enfeebling Magic --	
     sets.midcast.Enfeebling = { -- Full skill set for frazzle/distract/Poison -- 
-		main={ name="Solstice", augments={'Mag. Acc.+20','Pet: Damage taken -4%','"Fast Cast"+5',}},
+		main="Eosuchus Club",
 		sub="Genbu's Shield",
-		range={ name="Dunna", augments={'MP+20','Mag. Acc.+10','"Fast Cast"+3',}},
-		head={ name="Merlinic Hood", augments={'Mag. Acc.+27','"Drain" and "Aspir" potency +7','MND+8','"Mag.Atk.Bns."+4',}},
+		range="Dunna",
+		head="Azimuth Hood",
 		body="Azimuth Coat",
 		hands="Azimuth Gloves",
-		legs="Psycloth Lappas",
-		feet={ name="Bagua Sandals +1", augments={'Enhances "Radial Arcana" effect',}},
-		neck="Spider Torque",
-		waist="Aswang Sash",
-		left_ear={ name="Moonshade Earring", augments={'Mag. Acc.+4','Latent effect: "Refresh"+1',}},
-		right_ear="Barkaro. Earring",
+		legs="Azimuth Tights",
+		feet={ name="Bagua Sandals", augments={'Enhances "Radial Arcana" effect',}},
+		neck="Eddy Necklace",
+		waist="Yamabuki-no-Obi",
+		left_ear="Barkaro. Earring",
+		right_ear="Gwati Earring",
 		left_ring="Perception Ring",
-		right_ring="Stikini Ring",
-		back={ name="Lifestream Cape", augments={'Geomancy Skill +9','Indi. eff. dur. +13','Pet: Damage taken -3%','Damage taken-2%',}},
+		right_ring="Balrahn's Ring",
+		back={ name="Lifestream Cape", augments={'Geomancy Skill +10','Indi. eff. dur. +12','Pet: Damage taken -2%',}},
 	}
 		
-	sets.midcast.Enfeebling.Macc = set_combine(sets.midcast.Enfeebling, {})	-- For Silence/Dispel/Sleep/Break/Gravity that arent affect by full enfeeb set or effect + gears --		
+	sets.midcast.Enfeebling.Macc = set_combine(sets.midcast.Enfeebling, {})	-- For Silence/Dispel/Sleep/Break/Gravity that arent affect by full enfeeb set or effect gears --		
     sets.midcast.Enfeebling.MND = set_combine(sets.midcast.Enfeebling, {}) -- For Paralyze/Slow who's potency/macc is enhanced by MND --
     sets.midcast.Enfeebling.INT = set_combine(sets.midcast.Enfeebling, {}) -- For Blind/Bind who's Macc is enhanced by INT --	
--- Dark Magic --
+
+	-- Dark Magic --
     sets.midcast.Bio = { -- For Bio, you want a full Dark magic skill set for potency -- 
-		main={ name="Solstice", augments={'Mag. Acc.+20','Pet: Damage taken -4%','"Fast Cast"+5',}},
-		range={ name="Dunna", augments={'MP+20','Mag. Acc.+10','"Fast Cast"+3',}},
-		head={ name="Merlinic Hood", augments={'Mag. Acc.+27','"Drain" and "Aspir" potency +7','MND+8','"Mag.Atk.Bns."+4',}},
+		main="Eosuchus Club",
+		sub="Genbu's Shield",
+		range="Dunna",
+		head={ name="Bagua Galero", augments={'Enhances "Primeval Zeal" effect',}},
 		body="Geomancy Tunic",
-		hands={ name="Merlinic Dastanas", augments={'Mag. Acc.+23','"Fast Cast"+5','INT+10','"Mag.Atk.Bns."+7',}},
+		hands="Yaoyotl Gloves",
 		legs="Azimuth Tights",
-		feet={ name="Merlinic Crackows", augments={'"Mag.Atk.Bns."+19','"Drain" and "Aspir" potency +8','INT+4','Mag. Acc.+12',}},
-		neck="Mizu. Kubikazari",
-		waist="Aswang Sash",
-		left_ear="Dark Earring",
-		right_ear="Barkaro. Earring",
-		left_ring="Tamas Ring",
-		right_ring="Stikini Ring",
-		back="Prism Cape",
+		feet={ name="Bagua Sandals", augments={'Enhances "Radial Arcana" effect',}},
+		neck="Eddy Necklace",
+		waist="Fucho-no-Obi",
+		left_ear="Barkaro. Earring",
+		right_ear="Gwati Earring",
+		left_ring="Perception Ring",
+		right_ring="Acumen Ring",
+		back={ name="Lifestream Cape", augments={'Geomancy Skill +10','Indi. eff. dur. +12','Pet: Damage taken -2%',}},
 	}
     sets.midcast.Dark = set_combine(sets.midcast.Bio, { -- For Aspir/Drain -- 
-		head="Bagua Galero",
-		legs={ name="Merlinic Shalwar", augments={'Mag. Acc.+5','"Drain" and "Aspir" potency +10','MND+7',}},
+
 	})
     sets.midcast['Stun']  = set_combine(sets.midcast.Bio, {})	
--- Elemental Magic --
+
+	-- Elemental Magic --
     sets.midcast.Elemental = { -- Normal Nukes --
-		main="Solstice",
-		range={ name="Dunna", augments={'MP+20','Mag. Acc.+10','"Fast Cast"+3',}},
-		head={ name="Merlinic Hood", augments={'Mag. Acc.+28','Magic burst mdg.+9%','"Mag.Atk.Bns."+10',}},
+		main="Eosuchus Club",
+		sub="Genbu's Shield",
+		range="Dunna",
+		head="Geomancy Galero",
 		body="Azimuth Coat",
-		hands={ name="Merlinic Dastanas", augments={'Mag. Acc.+23 "Mag.Atk.Bns."+23','Magic burst mdg.+11%','Mag. Acc.+8','"Mag.Atk.Bns."+7',}},
-		legs={ name="Merlinic Shalwar", augments={'"Mag.Atk.Bns."+21','Magic burst mdg.+9%','Mag. Acc.+15',}},
-		feet={ name="Merlinic Crackows", augments={'Mag. Acc.+23','Magic burst mdg.+8%','MND+1','"Mag.Atk.Bns."+10',}},
-		neck="Mizu. Kubikazari",
-		waist="Aswang Sash",
-		left_ear="Friomisi Earring",
-		right_ear="Barkaro. Earring",
-		left_ring="Acumen Ring",
-		right_ring="Stikini Ring",
-		back="Izdubar Mantle",
+		hands="Yaoyotl Gloves",
+		legs="Azimuth Tights",
+		feet="Umbani Boots",
+		neck="Eddy Necklace",
+		waist="Yamabuki-no-Obi",
+		left_ear="Barkaro. Earring",
+		right_ear="Hecate's Earring",
+		left_ring="Perception Ring",
+		right_ring="Acumen Ring",
+		back={ name="Lifestream Cape", augments={'Geomancy Skill +10','Indi. eff. dur. +12','Pet: Damage taken -2%',}},
 	} 
     sets.midcast.Elemental.MB = set_combine(sets.midcast.Elemental, { -- For when MB mode is turned on --
-		left_ring="Mujin Band",
+		left_ring="Locus Ring",
 	})		
     sets.midcast.Elemental.Weather = set_combine(sets.midcast.Elemental, { -- For normal nukes with weather on/appropriate day --
-		back="Twilight Cape",
-		waist="Hachirin-no-Obi"})	
+
+	})	
     sets.midcast.Elemental.MB.Weather = set_combine(sets.midcast.Elemental.MB, { -- For MB nukes with weather on/appropriate day --
-		back="Twilight Cape",
-		waist="Hachirin-no-Obi"})
+
+	})
 	sets.midcast['Impact'] = set_combine(sets.midcast.Elemental, {  -- Make sure to leave the head empty --
 	    head=empty,
-	    body="Twilight Cloak"})		
--- Geomancy Magic --
+	    body="Twilight Cloak"
+	})		
+
+	-- Geomancy Magic --
     sets.midcast.Geomancy = {
-		main="Solstice",
-	    range="Dunna", 
-		ammo=empty,
-		head="Azimuth Hood +1",
-		body="Bagua Tunic +1",
-		neck="Incanter's Torque",
-		hands="Geo. Mitaines +1",
-	    back="Lifestream Cape",
-		ring1="Renaye Ring",
-		ring2="Stikini Ring"
+		range="Dunna",
+		head="Azimuth Hood",
+		body={ name="Bagua Tunic", augments={'Enhances "Bolster" effect',}},
+		hands="Geomancy Mitaines",
+		legs={ name="Bagua Pants", augments={'Enhances "Mending Halation" effect',}},
+		feet="Azimuth Gaiters",
+		back={ name="Lifestream Cape", augments={'Geomancy Skill +10','Indi. eff. dur. +12','Pet: Damage taken -2%',}},
 	}
 	sets.midcast.Indi = set_combine(sets.midcast.Geomancy, {
-	    main="Solstice",
-		legs="Bagua Pants",
-		feet="Azimuth Gaiters"}) 	
+		
+	}) 	
+
 ---- Aftercast ----
+
     sets.aftercast = {}
 	-- Player Idle sets --
     sets.aftercast.Idle = {
 		main="Bolelabunga",
 		sub="Genbu's Shield",
-		range={ name="Dunna", augments={'MP+20','Mag. Acc.+10','"Fast Cast"+3',}},
-		head="Azimuth Hood +1",
-		body="Vrikodara Jupon",
+		range="Dunna",
+		head="Azimuth Hood",
+		body="Artsieq Jubbah",
 		hands={ name="Bagua Mitaines", augments={'Enhances "Curative Recantation" effect',}},
-		legs="Assid. Pants +1",
-		feet="Battlecast Gaiters",
-		neck="Sanctity Necklace",
-		waist="Witful Belt",
-		left_ear={ name="Moonshade Earring", augments={'Mag. Acc.+4','Latent effect: "Refresh"+1',}},
-		right_ear="Etiolation Earring",
-		left_ring="Renaye Ring",
-		right_ring="Stikini Ring",
-		back={ name="Lifestream Cape", augments={'Geomancy Skill +9','Indi. eff. dur. +13','Pet: Damage taken -3%','Damage taken-2%',}},
+		legs="Wayfarer Slops",
+		feet={ name="Bagua Sandals", augments={'Enhances "Radial Arcana" effect',}},
+		neck={ name="Jeweled Collar", augments={'"Fast Cast"+1','INT+2',}},
+		waist="Fucho-no-Obi",
+		left_ear="Zennaroi Earring",
+		right_ear="Loquac. Earring",
+		left_ring={ name="Dark Ring", augments={'Phys. dmg. taken -6%','Breath dmg. taken -3%',}},
+		right_ring={ name="Dark Ring", augments={'Phys. dmg. taken -5%','Magic dmg. taken -3%','Breath dmg. taken -4%',}},
+		back={ name="Lifestream Cape", augments={'Geomancy Skill +10','Indi. eff. dur. +12','Pet: Damage taken -2%',}},
 	}
     sets.aftercast.Refresh = set_combine(sets.aftercast.Idle, { -- Refresh gears goes here --
 	
 	})       	
 	-- Pet Idle sets --
-    sets.aftercast.Luopan =  { -- When you want refresh wile luopan is out --
-		main="Solstice",
-		sub="Genbu's Shield",
-		range={ name="Dunna", augments={'MP+20','Mag. Acc.+10','"Fast Cast"+3',}},
-		head="Azimuth Hood +1",
-		body="Vrikodara Jupon",
-		hands="Geo. Mitaines +1",
-		legs="Assid. Pants +1",
-		feet="Bagua Sandals +1",
-		neck="Sanctity Necklace",
-		waist="Witful Belt",
-		left_ear={ name="Moonshade Earring", augments={'Mag. Acc.+4','Latent effect: "Refresh"+1',}},
-		right_ear="Etiolation Earring",
-		left_ring="Renaye Ring",
-		right_ring="Stikini Ring",
-		back={ name="Lifestream Cape", augments={'Geomancy Skill +9','Indi. eff. dur. +13','Pet: Damage taken -3%','Damage taken-2%',}},
-	}		
+    sets.aftercast.Luopan =  set_combine(sets.aftercast.Idle, { -- When you want refresh wile luopan is out --
+
+	})	
     sets.aftercast.Luopan.Regen =  set_combine(sets.aftercast.Luopan, { -- Luopan Regen gears --
-		back={ name="Nantosuelta's Cape", augments={'Pet: "Regen"+10',}},
+
 	})			
     sets.aftercast.Luopan.Defense = set_combine(sets.aftercast.Luopan, { -- When YOU need to stand in range --
-		neck="Twilight Torque"
+
 	})
     sets.aftercast.Town = set_combine(sets.aftercast.Idle, {}) -- For town --
     sets.resting = {}
@@ -293,6 +264,7 @@ function get_sets()
     sets.engaged = {}
     sets.engaged.DualWield = {}	
 end	
+
 ---- .::Pretarget Functions::. ---->
 function pretarget(spell,action)
     -- Auto Remedy --
