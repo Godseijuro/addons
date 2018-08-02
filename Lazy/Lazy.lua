@@ -97,6 +97,10 @@ function HeadingTo(X,Y)
 end
 
 function TurnToTarget()
+	if windower.ffxi.get_mob_by_target('t') == nil then
+		return
+	end
+	
 	local destX = windower.ffxi.get_mob_by_target('t').x
 	local destY = windower.ffxi.get_mob_by_target('t').y
 	local direction = math.abs(PlayerH - math.deg(HeadingTo(destX,destY)))
